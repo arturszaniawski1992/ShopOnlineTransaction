@@ -1,4 +1,4 @@
-package exception;
+package com.capgemini.exception;
 
 public class InvalidCreationException extends RuntimeException {
 

@@ -3,24 +3,24 @@ package com.capgemini.types;
 import java.time.LocalDate;
 import java.util.List;
 
-import embedded.AdressDataEntity;
-import exception.InvalidCreationException;
+import com.capgemini.exception.InvalidCreationException;
 
 public class CustomerTO {
-
+	private Long version;
 	private Long id;
 	private String firstName;
 	private String lastName;
 	private LocalDate dateOfBirth;
 	private String mobile;
 	private String mail;
-	private AdressDataEntity adressData;
+	private AdressDataTO adressData;
 	private List<Long> transactions;
 
 	public CustomerTO() {
 	}
 
 	public CustomerTO(CustomerTOBuilder builder) {
+		this.version = builder.version;
 		this.id = builder.id;
 		this.firstName = builder.firstName;
 		this.lastName = builder.lastName;
@@ -29,6 +29,14 @@ public class CustomerTO {
 		this.mail = builder.mail;
 		this.adressData = builder.adressData;
 		this.transactions = builder.transactions;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 
 	public Long getId() {
@@ -79,11 +87,11 @@ public class CustomerTO {
 		this.mail = mail;
 	}
 
-	public AdressDataEntity getAdressData() {
+	public AdressDataTO getAdressData() {
 		return adressData;
 	}
 
-	public void setAdressData(AdressDataEntity adressData) {
+	public void setAdressData(AdressDataTO adressData) {
 		this.adressData = adressData;
 	}
 
@@ -96,13 +104,14 @@ public class CustomerTO {
 	}
 
 	public static class CustomerTOBuilder {
+		private Long version;
 		private Long id;
 		private String firstName;
 		private String lastName;
 		private LocalDate dateOfBirth;
 		private String mobile;
 		private String mail;
-		private AdressDataEntity adressData;
+		private AdressDataTO adressData;
 		private List<Long> transactions;
 
 		/**
@@ -111,6 +120,11 @@ public class CustomerTO {
 		 */
 		public CustomerTOBuilder() {
 
+		}
+
+		public CustomerTOBuilder withVersion(Long version) {
+			this.version = version;
+			return this;
 		}
 
 		/**
@@ -192,7 +206,7 @@ public class CustomerTO {
 		 *            as adress for customer.
 		 * @return adress of customer.
 		 */
-		public CustomerTOBuilder withAdressData(AdressDataEntity adressData) {
+		public CustomerTOBuilder withAdressData(AdressDataTO adressData) {
 			this.adressData = adressData;
 			return this;
 		}

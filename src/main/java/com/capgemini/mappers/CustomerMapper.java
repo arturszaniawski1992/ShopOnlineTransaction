@@ -25,10 +25,11 @@ public class CustomerMapper {
 		if (customerEntity == null)
 			return null;
 
-		CustomerTOBuilder customerTOBuilder = new CustomerTOBuilder().withId(customerEntity.getId())
-				.withFirstName(customerEntity.getFirstName()).withLastName(customerEntity.getLastName())
-				.withDateOfBirth(customerEntity.getDateOfBirth()).withMail(customerEntity.getMail())
-				.withMobile(customerEntity.getMobile());
+		CustomerTOBuilder customerTOBuilder = new CustomerTOBuilder().withVersion(customerEntity.getVersion())
+				.withId(customerEntity.getId()).withFirstName(customerEntity.getFirstName())
+				.withAdressData(AdressMapper.toAdressDataTO((customerEntity.getAdressData())))
+				.withLastName(customerEntity.getLastName()).withDateOfBirth(customerEntity.getDateOfBirth())
+				.withMail(customerEntity.getMail()).withMobile(customerEntity.getMobile());
 
 		if (customerEntity.getTransactions() != null) {
 			customerTOBuilder.withTransactions(
@@ -50,10 +51,11 @@ public class CustomerMapper {
 			}
 		}
 
-		CustomerEntityBuilder customerEntityBuilder = new CustomerEntityBuilder().withId(customerTO.getId())
-				.withFirstName(customerTO.getFirstName()).withLastName(customerTO.getLastName())
-				.withDateOfBirth(customerTO.getDateOfBirth()).withMail(customerTO.getMail())
-				.withMobile(customerTO.getMobile());
+		CustomerEntityBuilder customerEntityBuilder = new CustomerEntityBuilder().withVersion(customerTO.getVersion())
+				.withId(customerTO.getId()).withFirstName(customerTO.getFirstName())
+				.withAdressData(AdressMapper.toAdressDataEntity(customerTO.getAdressData()))
+				.withLastName(customerTO.getLastName()).withDateOfBirth(customerTO.getDateOfBirth())
+				.withMail(customerTO.getMail()).withMobile(customerTO.getMobile());
 
 		return customerEntityBuilder.build();
 
@@ -63,8 +65,8 @@ public class CustomerMapper {
 		return carEntities.stream().map(this::toCustomerTO).collect(Collectors.toList());
 	}
 
-	public List<CustomerEntity> map2Entities(List<CustomerTO> carTOs) {
-		return carTOs.stream().map(this::toCustomerEntity).collect(Collectors.toList());
+	public List<CustomerEntity> map2Entities(List<CustomerTO> customerTOs) {
+		return customerTOs.stream().map(this::toCustomerEntity).collect(Collectors.toList());
 	}
 
 }

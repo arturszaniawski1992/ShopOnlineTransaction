@@ -1,4 +1,4 @@
-package embedded;
+package com.capgemini.embeded;
 
 import java.io.Serializable;
 
@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class AdressDataEntity implements Serializable {
+public class AdressData implements Serializable {
 
 	/**
 	 * 
@@ -22,11 +22,11 @@ public class AdressDataEntity implements Serializable {
 	@Column(name = "post_code", length = 6, nullable = false)
 	private String postCode;
 
-	public AdressDataEntity() {
+	public AdressData() {
 		super();
 	}
 
-	public AdressDataEntity(AdressDataEntityBuilder builder) {
+	public AdressData(AdressDataEntityBuilder builder) {
 		this.street = builder.street;
 		this.number = builder.number;
 		this.city = builder.city;
@@ -137,8 +137,8 @@ public class AdressDataEntity implements Serializable {
 		 * 
 		 * @return New object.
 		 */
-		public AdressDataEntity build() {
-			return new AdressDataEntity(this);
+		public AdressData build() {
+			return new AdressData(this);
 		}
 	}
 

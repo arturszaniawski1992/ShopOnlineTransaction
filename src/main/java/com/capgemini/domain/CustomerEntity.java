@@ -12,21 +12,17 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.capgemini.embeded.AdressData;
+import com.capgemini.exception.InvalidCreationException;
 import com.capgemini.listeners.InsertListener;
 import com.capgemini.listeners.UpdateListener;
 
-import embedded.AdressDataEntity;
-import exception.InvalidCreationException;
-
 @Entity
 @Table(name = "customer")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @EntityListeners({ UpdateListener.class, InsertListener.class })
 public class CustomerEntity extends AbstractEntity implements Serializable {
 
@@ -35,7 +31,7 @@ public class CustomerEntity extends AbstractEntity implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Version
-	public int version;
+	public Long version;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -51,7 +47,7 @@ public class CustomerEntity extends AbstractEntity implements Serializable {
 	@Column(length = 50)
 	private String mail;
 	@Embedded
-	private AdressDataEntity adressData;
+	private AdressData adressData;
 
 	@OneToMany(mappedBy = "customerEntity", cascade = CascadeType.REMOVE)
 	private List<TransactionEntity> transactions;
@@ -64,6 +60,7 @@ public class CustomerEntity extends AbstractEntity implements Serializable {
 	}
 
 	public CustomerEntity(CustomerEntityBuilder builder) {
+		this.version = builder.version;
 		this.id = builder.id;
 		this.firstName = builder.firstName;
 		this.lastName = builder.lastName;
@@ -73,6 +70,14 @@ public class CustomerEntity extends AbstractEntity implements Serializable {
 		this.adressData = builder.adressData;
 		this.transactions = builder.transactions;
 
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 
 	public Long getId() {
@@ -87,24 +92,48 @@ public class CustomerEntity extends AbstractEntity implements Serializable {
 		return firstName;
 	}
 
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
 	public String getLastName() {
 		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
 	}
 
+	public void setDateOfBirth(LocalDate dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
+
 	public String getMobile() {
 		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 	public String getMail() {
 		return mail;
 	}
 
-	public AdressDataEntity getAdressData() {
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
+	public AdressData getAdressData() {
 		return adressData;
+	}
+
+	public void setAdressData(AdressData adressData) {
+		this.adressData = adressData;
 	}
 
 	public List<TransactionEntity> getTransactions() {
@@ -120,13 +149,14 @@ public class CustomerEntity extends AbstractEntity implements Serializable {
 	}
 
 	public static class CustomerEntityBuilder {
+		private Long version;
 		private Long id;
 		private String firstName;
 		private String lastName;
 		private LocalDate dateOfBirth;
 		private String mobile;
 		private String mail;
-		private AdressDataEntity adressData;
+		private AdressData adressData;
 		private List<TransactionEntity> transactions;
 
 		/**
@@ -134,6 +164,11 @@ public class CustomerEntity extends AbstractEntity implements Serializable {
 		 *
 		 */
 		public CustomerEntityBuilder() {
+		}
+
+		public CustomerEntityBuilder withVersion(Long version) {
+			this.version = version;
+			return this;
 		}
 
 		/**
@@ -211,11 +246,11 @@ public class CustomerEntity extends AbstractEntity implements Serializable {
 		/**
 		 * This is the method which add adress to customer.
 		 * 
-		 * @param AdressDataEntity
+		 * @param AdressData
 		 *            as adress for customer.
 		 * @return adress of customer.
 		 */
-		public CustomerEntityBuilder withAdressData(AdressDataEntity adressData) {
+		public CustomerEntityBuilder withAdressData(AdressData adressData) {
 			this.adressData = adressData;
 			return this;
 		}

@@ -12,8 +12,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -24,14 +22,12 @@ import javax.persistence.Version;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.capgemini.enums.TransactionStatus;
+import com.capgemini.exception.InvalidCreationException;
 import com.capgemini.listeners.InsertListener;
 import com.capgemini.listeners.UpdateListener;
 
-import exception.InvalidCreationException;
-
 @Entity
 @Table(name = "transaction")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @EntityListeners({ UpdateListener.class, InsertListener.class })
 public class TransactionEntity extends AbstractEntity implements Serializable {
 
@@ -40,7 +36,7 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Version
-	public int version;
+	public Long version;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -64,6 +60,7 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 	}
 
 	public TransactionEntity(TransactionEntityBuilder builder) {
+		this.version = builder.version;
 		this.id = builder.id;
 		this.dateTransaction = builder.dateTransaction;
 		this.transactionStatus = builder.transactionStatus;
@@ -71,6 +68,14 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 		this.customerEntity = builder.customerEntity;
 		this.products = builder.products;
 
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 
 	public Long getId() {
@@ -122,7 +127,7 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 	}
 
 	public static class TransactionEntityBuilder {
-
+		private Long version;
 		private Long id;
 		LocalDateTime dateTransaction;
 		private TransactionStatus transactionStatus;
@@ -131,6 +136,11 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 		private List<PurchasedProductEntity> products;
 
 		public TransactionEntityBuilder() {
+		}
+
+		public TransactionEntityBuilder withVersion(Long version) {
+			this.version = version;
+			return this;
 		}
 
 		public TransactionEntityBuilder withId(Long id) {

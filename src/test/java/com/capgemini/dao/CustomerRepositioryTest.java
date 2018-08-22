@@ -1,15 +1,14 @@
 package com.capgemini.dao;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.capgemini.domain.CustomerEntity;
 import com.capgemini.domain.CustomerEntity.CustomerEntityBuilder;
-
-import embedded.AdressDataEntity;
-import embedded.AdressDataEntity.AdressDataEntityBuilder;
-import exception.InvalidCreationException;
+import com.capgemini.embeded.AdressData;
+import com.capgemini.embeded.AdressData.AdressDataEntityBuilder;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = "spring.profiles.active=hsql")
@@ -34,33 +31,79 @@ public class CustomerRepositioryTest {
 
 	@Autowired
 	private CustomerRepository customerRepository;
-	CustomerEntity customer1;
-	CustomerEntity customer2;
-	CustomerEntity customer3;
-
-	@Before
-	public void setup() throws InvalidCreationException {
-
-		AdressDataEntity adress = new AdressDataEntityBuilder().withStreet("Warszawska").withCity("Poznan")
-				.withNumber(15).withPostCode("45-210").build();
-		customer1 = new CustomerEntityBuilder().withFirstName("Artur").withLastName("Szaniawski")
-				.withMobile("789456123").withAdressData(adress).build();
-		customer2 = new CustomerEntityBuilder().withFirstName("Artur").withLastName("Szaniawski")
-				.withMobile("789456123").withAdressData(adress).build();
-		customer3 = new CustomerEntityBuilder().withFirstName("Artur").withLastName("Szaniawski")
-				.withMobile("789456123").withAdressData(adress).build();
-		customer1 = customerRepository.save(customer1);
-		customer2 = customerRepository.save(customer2);
-		customer3 = customerRepository.save(customer3);
-
-	}
 
 	@Test
 	public void shouldFindCustomerById() {
 		// given
-		// when
-		// then
+		AdressData adress = new AdressDataEntityBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
+				.withStreet("Warszawska").build();
 
+		CustomerEntity cust1 = new CustomerEntityBuilder().withFirstName("Artur").withLastName("Szaniawski")
+				.withMobile("456123456").withAdressData(adress).build();
+
+		CustomerEntity savedCustomer = customerRepository.save(cust1);
+
+		// when
+		CustomerEntity selectedCustomer = customerRepository.findById(savedCustomer.getId());
+
+		// then
+		assertThat(savedCustomer.getFirstName()).isEqualTo(selectedCustomer.getFirstName());
+		assertThat(savedCustomer.getId()).isEqualTo(selectedCustomer.getId());
 	}
 
+	@Test
+	public void shouldFindCustomerByFirstNameAndLastName() {
+		// given
+		AdressData adress = new AdressDataEntityBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
+				.withStreet("Warszawska").build();
+
+		CustomerEntity cust1 = new CustomerEntityBuilder().withFirstName("Artur").withLastName("Szaniawski")
+				.withMobile("456123456").withAdressData(adress).build();
+		CustomerEntity cust2 = new CustomerEntityBuilder().withFirstName("Artur").withLastName("Szaniawski")
+				.withMobile("456123456").withAdressData(adress).build();
+
+		customerRepository.save(cust1);
+		customerRepository.save(cust2);
+
+		// when
+		List<CustomerEntity> listOfCustomers = customerRepository.findByFirstNameAndLastName("Artur", "Szaniawski");
+		// then
+		assertNotNull(listOfCustomers);
+		assertEquals(2, listOfCustomers.size());
+	}
+
+	@Test
+	public void shouldRemoveCustomerById() {
+		// given
+		AdressData adress = new AdressDataEntityBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
+				.withStreet("Warszawska").build();
+
+		CustomerEntity cust1 = new CustomerEntityBuilder().withFirstName("Artur").withLastName("Szaniawski")
+				.withMobile("456123456").withAdressData(adress).build();
+
+		CustomerEntity savedCustomer = customerRepository.save(cust1);
+
+		// when
+
+		customerRepository.deleteById(savedCustomer.getId());
+		// then
+		assertEquals(0, customerRepository.count());
+	}
+
+	@Test
+	public void shouldRemoveCustomerByLastName() {
+		// given
+		AdressData adress = new AdressDataEntityBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
+				.withStreet("Warszawska").build();
+
+		CustomerEntity cust1 = new CustomerEntityBuilder().withFirstName("Artur").withLastName("Szaniawski")
+				.withMobile("456123456").withAdressData(adress).build();
+
+		CustomerEntity savedCustomer = customerRepository.save(cust1);
+
+		// when
+		customerRepository.deleteByLastName(savedCustomer.getLastName());
+		// then
+		assertEquals(0, customerRepository.count());
+	}
 }

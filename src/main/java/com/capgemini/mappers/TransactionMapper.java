@@ -24,7 +24,8 @@ public class TransactionMapper {
 		if (transactionEntity == null)
 			return null;
 
-		TransactionTOBuilder transactionTOBuilder = new TransactionTOBuilder().withId(transactionEntity.getId())
+		TransactionTOBuilder transactionTOBuilder = new TransactionTOBuilder()
+				.withVersion(transactionEntity.getVersion()).withId(transactionEntity.getId())
 				.withCustomerId(transactionEntity.getCustomerEntity().getId()).withAmount(transactionEntity.getAmount())
 				.withDateTransaction(transactionEntity.getDateTransaction())
 				.withTransactionStatus(transactionEntity.getTransactionStatus());
@@ -51,9 +52,9 @@ public class TransactionMapper {
 		CustomerEntity customerEntity = new CustomerEntity();
 		CustomerEntity customer = entityManager.getReference(CustomerEntity.class, customerEntity.getId());
 
-		TransactionEntityBuilder transactionEntityBuilder = new TransactionEntityBuilder().withId(transactionTO.getId())
-				.withCustomerEntity(customer).withAmount(transactionTO.getAmount())
-				.withDateTransaction(transactionTO.getDateTransaction())
+		TransactionEntityBuilder transactionEntityBuilder = new TransactionEntityBuilder()
+				.withVersion(transactionTO.getVersion()).withId(transactionTO.getId()).withCustomerEntity(customer)
+				.withAmount(transactionTO.getAmount()).withDateTransaction(transactionTO.getDateTransaction())
 				.withTransactionStatus(transactionTO.getTransactionStatus());
 
 		return transactionEntityBuilder.build();

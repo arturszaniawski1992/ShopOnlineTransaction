@@ -10,20 +10,16 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.capgemini.exception.InvalidCreationException;
 import com.capgemini.listeners.InsertListener;
 import com.capgemini.listeners.UpdateListener;
 
-import exception.InvalidCreationException;
-
 @Entity
 @Table(name = "purchased_product")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @EntityListeners({ UpdateListener.class, InsertListener.class })
 public class PurchasedProductEntity extends AbstractEntity implements Serializable {
 
@@ -32,8 +28,7 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 	 */
 	private static final long serialVersionUID = 1L;
 	@Version
-	public int version;
-
+	public Long version;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -53,12 +48,21 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 	}
 
 	public PurchasedProductEntity(PurchasedProductEntityBuilder builder) {
+		this.version = builder.version;
 		this.id = builder.id;
 		this.price = builder.price;
 		this.productName = builder.productName;
 		this.margin = builder.margin;
 		this.weight = builder.weight;
 		this.transactions = builder.transactions;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 
 	public Long getId() {
@@ -110,7 +114,7 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 	}
 
 	public static class PurchasedProductEntityBuilder {
-
+		private Long version;
 		private Long id;
 		private Double price;
 		private String productName;
@@ -119,6 +123,11 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 		private List<TransactionEntity> transactions;
 
 		public PurchasedProductEntityBuilder() {
+		}
+
+		public PurchasedProductEntityBuilder withVersion(Long version) {
+			this.version = version;
+			return this;
 		}
 
 		public PurchasedProductEntityBuilder withId(Long id) {
@@ -152,7 +161,7 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 		}
 
 		public PurchasedProductEntity build() {
-			if (price == null || productName == null || margin == null || weight == null) {
+			if (price == null || productName == null || weight == null) {
 				throw new InvalidCreationException("Incorrect purchased product to be created");
 			}
 

@@ -4,11 +4,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.capgemini.enums.TransactionStatus;
-
-import exception.InvalidCreationException;
+import com.capgemini.exception.InvalidCreationException;
 
 public class TransactionTO {
-
+	private Long version;
 	private Long id;
 	LocalDateTime dateTransaction;
 	private TransactionStatus transactionStatus;
@@ -20,12 +19,21 @@ public class TransactionTO {
 	}
 
 	public TransactionTO(TransactionTOBuilder builder) {
+		this.version = builder.version;
 		this.id = builder.id;
 		this.dateTransaction = builder.dateTransaction;
 		this.transactionStatus = builder.transactionStatus;
 		this.amount = builder.amount;
 		this.customerId = builder.customerId;
 		this.products = builder.products;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 
 	public Long getId() {
@@ -77,6 +85,7 @@ public class TransactionTO {
 	}
 
 	public static class TransactionTOBuilder {
+		private Long version;
 		private Long id;
 		LocalDateTime dateTransaction;
 		private TransactionStatus transactionStatus;
@@ -85,6 +94,11 @@ public class TransactionTO {
 		private List<Long> products;
 
 		public TransactionTOBuilder() {
+		}
+
+		public TransactionTOBuilder withVersion(Long version) {
+			this.version = version;
+			return this;
 		}
 
 		public TransactionTOBuilder withId(Long id) {

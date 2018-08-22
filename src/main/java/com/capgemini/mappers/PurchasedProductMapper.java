@@ -25,9 +25,9 @@ public class PurchasedProductMapper {
 			return null;
 
 		PurchasedProductTOBuilder purchasedProductTOBuilder = new PurchasedProductTOBuilder()
-				.withId(purchasedProductEntity.getId()).withProductName(purchasedProductEntity.getProductName())
-				.withPrice(purchasedProductEntity.getPrice()).withMargin(purchasedProductEntity.getMargin())
-				.withWeight(purchasedProductEntity.getWeight());
+				.withVersion(purchasedProductEntity.getVersion()).withId(purchasedProductEntity.getId())
+				.withProductName(purchasedProductEntity.getProductName()).withPrice(purchasedProductEntity.getPrice())
+				.withMargin(purchasedProductEntity.getMargin()).withWeight(purchasedProductEntity.getWeight());
 		if (purchasedProductEntity.getTransactions() != null) {
 			purchasedProductTOBuilder.withTransactions(
 					purchasedProductEntity.getTransactions().stream().map(e -> e.getId()).collect(Collectors.toList()));
@@ -49,9 +49,9 @@ public class PurchasedProductMapper {
 		}
 
 		PurchasedProductEntityBuilder purchasedProductEntityBuilder = new PurchasedProductEntityBuilder()
-				.withId(purchasedProductTO.getId()).withProductName(purchasedProductTO.getProductName())
-				.withPrice(purchasedProductTO.getPrice()).withMargin(purchasedProductTO.getMargin())
-				.withWeight(purchasedProductTO.getWeight());
+				.withVersion(purchasedProductTO.getVersion()).withId(purchasedProductTO.getId())
+				.withProductName(purchasedProductTO.getProductName()).withPrice(purchasedProductTO.getPrice())
+				.withMargin(purchasedProductTO.getMargin()).withWeight(purchasedProductTO.getWeight());
 
 		return purchasedProductEntityBuilder.build();
 

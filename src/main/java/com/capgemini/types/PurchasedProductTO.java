@@ -2,10 +2,10 @@ package com.capgemini.types;
 
 import java.util.List;
 
-import exception.InvalidCreationException;
+import com.capgemini.exception.InvalidCreationException;
 
 public class PurchasedProductTO {
-
+	private Long version;
 	private Long id;
 	private Double price;
 	private String productName;
@@ -17,12 +17,21 @@ public class PurchasedProductTO {
 	}
 
 	public PurchasedProductTO(PurchasedProductTOBuilder builder) {
+		this.version = builder.version;
 		this.id = builder.id;
 		this.price = builder.price;
 		this.productName = builder.productName;
 		this.margin = builder.margin;
 		this.weight = builder.weight;
 		this.transactions = builder.transactions;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 
 	public Long getId() {
@@ -74,6 +83,7 @@ public class PurchasedProductTO {
 	}
 
 	public static class PurchasedProductTOBuilder {
+		private Long version;
 		private Long id;
 		private Double price;
 		private String productName;
@@ -82,6 +92,11 @@ public class PurchasedProductTO {
 		private List<Long> transactions;
 
 		public PurchasedProductTOBuilder() {
+		}
+
+		public PurchasedProductTOBuilder withVersion(Long version) {
+			this.version = version;
+			return this;
 		}
 
 		public PurchasedProductTOBuilder withId(Long id) {
