@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.capgemini.dao.CustomerRepository;
 import com.capgemini.dao.PurchasedProductRepository;
 import com.capgemini.dao.TransactionRepository;
+import com.capgemini.domain.TransactionEntity;
 import com.capgemini.mappers.CustomerMapper;
 import com.capgemini.mappers.PurchasedProductMapper;
 import com.capgemini.mappers.TransactionMapper;
@@ -39,32 +40,36 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public TransactionTO findTransactionById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return transactionMapper.toTransactionTO(transactionRepository.findById(id));
+
 	}
 
 	@Override
 	public List<TransactionTO> findAllTranactions() {
-		// TODO Auto-generated method stub
-		return null;
+		List<TransactionEntity> allTransactions = transactionRepository.findAll();
+		return transactionMapper.map2TOs(allTransactions);
 	}
 
 	@Override
 	public TransactionTO updateTransaction(TransactionTO transactionTO) {
-		// TODO Auto-generated method stub
-		return null;
+		TransactionEntity transactionEntity = transactionRepository.findById(transactionTO.getCustomerId());
+		transactionEntity.setAmount(transactionTO.getAmount());
+		transactionEntity.setDateTransaction(transactionTO.getDateTransaction());
+		transactionEntity.setTransactionStatus(transactionTO.getTransactionStatus());
+		transactionRepository.save(transactionEntity);
+		return transactionMapper.toTransactionTO(transactionEntity);
 	}
 
 	@Override
 	public TransactionTO saveTransaction(TransactionTO transactionTO) {
-		// TODO Auto-generated method stub
-		return null;
+		TransactionEntity transactionEntity = transactionRepository
+				.save(transactionMapper.toTransactionEntity(transactionTO));
+		return transactionMapper.toTransactionTO(transactionEntity);
 	}
 
 	@Override
 	public void removeTransaction(Long id) {
-		// TODO Auto-generated method stub
-
+		transactionRepository.deleteById(id);
 	}
 
 }

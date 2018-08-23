@@ -15,4 +15,6 @@ public interface PurchasedProductService {
 	PurchasedProductTO savePurchasedProduct(PurchasedProductTO purchasedProductTO);
 
 	void removeProduct(Long id);
+
+	Long countProducts();
 }

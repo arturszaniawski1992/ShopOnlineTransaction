@@ -5,6 +5,7 @@ import java.util.List;
 import com.capgemini.types.TransactionTO;
 
 public interface TransactionService {
+
 	TransactionTO findTransactionById(Long id);
 
 	List<TransactionTO> findAllTranactions();

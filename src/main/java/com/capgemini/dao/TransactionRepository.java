@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.capgemini.domain.CustomerEntity;
 import com.capgemini.domain.TransactionEntity;
 import com.capgemini.enums.TransactionStatus;
 
@@ -16,5 +15,5 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
 
 	void deleteByTransactionStatus(TransactionStatus transactionStatus);
 
-	void deleteByCustomerEntity(CustomerEntity customerEntity);
+	void deleteById(Long id);
 }

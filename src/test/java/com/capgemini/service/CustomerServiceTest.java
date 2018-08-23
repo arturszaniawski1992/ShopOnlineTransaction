@@ -2,10 +2,11 @@ package com.capgemini.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.persister.walking.spi.AssociationVisitationStrategy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,30 @@ public class CustomerServiceTest {
 
 	@Autowired
 	private CustomerService customerService;
+
+	@Test
+	public void shouldTesVersion() {
+		// given
+
+		String lastName = "Kowalski";
+		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
+				.withStreet("Warszawska").build();
+
+		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("Szaniawski")
+				.withAdressData(adress).withMobile("4564564564").build();
+		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
+
+		// when
+		savedCustomer.setLastName(lastName);
+		Long ver1 = customerService.findCustomerById(savedCustomer.getId()).getVersion();
+		customerService.updateCustomer(savedCustomer);
+		Long ver2 = customerService.findCustomerById(savedCustomer.getId()).getVersion();
+
+		Long verTest = 1L;
+		// then
+		assertThat(ver1).isNotEqualTo(ver2);
+		assertEquals(verTest, ver2);
+	}
 
 	@Test
 	public void shouldFindCustomerById() {
