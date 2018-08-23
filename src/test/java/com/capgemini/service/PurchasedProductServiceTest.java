@@ -75,11 +75,10 @@ public class PurchasedProductServiceTest {
 		purchasedProductService.savePurchasedProduct(product4);
 
 		// when
-		purchasedProductService.removeProduct(product1.getId());
-		List<PurchasedProductTO> products = purchasedProductService.findAllPurchasedProducts();
 
-		Long numberOfProducts = purchasedProductService.countProducts();
-		Long number = 3L;
+		List<PurchasedProductTO> products = purchasedProductService.findAllPurchasedProducts();
+		purchasedProductService.removeProduct(product1.getId());
+
 		// then
 		assertEquals(3, products.size());
 

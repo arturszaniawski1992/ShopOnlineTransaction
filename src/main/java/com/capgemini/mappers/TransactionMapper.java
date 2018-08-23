@@ -26,13 +26,13 @@ public class TransactionMapper {
 
 		TransactionTOBuilder transactionTOBuilder = new TransactionTOBuilder()
 				.withVersion(transactionEntity.getVersion()).withId(transactionEntity.getId())
-				.withCustomerId(transactionEntity.getCustomerEntity().getId()).withAmount(transactionEntity.getAmount())
+				.withCustomerId(transactionEntity.getCustomerEntity().getId())
 				.withDateTransaction(transactionEntity.getDateTransaction())
 				.withTransactionStatus(transactionEntity.getTransactionStatus());
 
-		if (transactionEntity.getProducts() != null) {
-			transactionTOBuilder.withProducts(
-					transactionEntity.getProducts().stream().map(e -> e.getId()).collect(Collectors.toList()));
+		if (transactionEntity.getOrders() != null) {
+			transactionTOBuilder.withOrders(
+					transactionEntity.getOrders().stream().map(e -> e.getId()).collect(Collectors.toList()));
 
 		}
 		return transactionTOBuilder.build();
@@ -42,11 +42,11 @@ public class TransactionMapper {
 		if (transactionTO == null)
 			return null;
 
-		List<Long> products = transactionTO.getProducts();
-		List<TransactionEntity> listOfProducts = new ArrayList<>();
-		if (products != null) {
-			for (Long id : products) {
-				listOfProducts.add(entityManager.getReference(TransactionEntity.class, id));
+		List<Long> orders = transactionTO.getOrders();
+		List<TransactionEntity> listOfProductOrders = new ArrayList<>();
+		if (orders != null) {
+			for (Long id : orders) {
+				listOfProductOrders.add(entityManager.getReference(TransactionEntity.class, id));
 			}
 		}
 		CustomerEntity customerEntity = new CustomerEntity();
@@ -54,7 +54,7 @@ public class TransactionMapper {
 
 		TransactionEntityBuilder transactionEntityBuilder = new TransactionEntityBuilder()
 				.withVersion(transactionTO.getVersion()).withId(transactionTO.getId()).withCustomerEntity(customer)
-				.withAmount(transactionTO.getAmount()).withDateTransaction(transactionTO.getDateTransaction())
+				.withDateTransaction(transactionTO.getDateTransaction())
 				.withTransactionStatus(transactionTO.getTransactionStatus());
 
 		return transactionEntityBuilder.build();

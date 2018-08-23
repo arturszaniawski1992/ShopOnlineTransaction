@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
@@ -13,9 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -45,16 +44,11 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 	LocalDateTime dateTransaction;
 	@Enumerated(EnumType.STRING)
 	private TransactionStatus transactionStatus;
-	@Column(length = 50, nullable = false)
-	private Integer amount;
-
 	@ManyToOne
 	@JoinColumn(name = "id_client")
 	private CustomerEntity customerEntity;
-	@ManyToMany
-	@JoinTable(name = "purchase", joinColumns = { @JoinColumn(name = "id_transaction") }, inverseJoinColumns = {
-			@JoinColumn(name = "id_product") })
-	private List<PurchasedProductEntity> products;
+	@OneToMany(mappedBy = "transactionEntity", cascade = CascadeType.REMOVE)
+	private List<OrderEntity> orders;
 
 	public TransactionEntity() {
 	}
@@ -64,9 +58,8 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 		this.id = builder.id;
 		this.dateTransaction = builder.dateTransaction;
 		this.transactionStatus = builder.transactionStatus;
-		this.amount = builder.amount;
 		this.customerEntity = builder.customerEntity;
-		this.products = builder.products;
+		this.orders = builder.orders;
 
 	}
 
@@ -102,14 +95,6 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 		this.transactionStatus = transactionStatus;
 	}
 
-	public Integer getAmount() {
-		return amount;
-	}
-
-	public void setAmount(Integer amount) {
-		this.amount = amount;
-	}
-
 	public CustomerEntity getCustomerEntity() {
 		return customerEntity;
 	}
@@ -118,12 +103,12 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 		this.customerEntity = customerEntity;
 	}
 
-	public List<PurchasedProductEntity> getProducts() {
-		return products;
+	public List<OrderEntity> getOrders() {
+		return orders;
 	}
 
-	public void setProducts(List<PurchasedProductEntity> products) {
-		this.products = products;
+	public void setOrders(List<OrderEntity> orders) {
+		this.orders = orders;
 	}
 
 	public static class TransactionEntityBuilder {
@@ -131,9 +116,8 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 		private Long id;
 		LocalDateTime dateTransaction;
 		private TransactionStatus transactionStatus;
-		private Integer amount;
 		private CustomerEntity customerEntity;
-		private List<PurchasedProductEntity> products;
+		private List<OrderEntity> orders;
 
 		public TransactionEntityBuilder() {
 		}
@@ -153,11 +137,6 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 			return this;
 		}
 
-		public TransactionEntityBuilder withAmount(Integer amount) {
-			this.amount = amount;
-			return this;
-		}
-
 		public TransactionEntityBuilder withTransactionStatus(TransactionStatus transactionStatus) {
 			this.transactionStatus = transactionStatus;
 			return this;
@@ -168,13 +147,13 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 			return this;
 		}
 
-		public TransactionEntityBuilder withProducts(List<PurchasedProductEntity> products) {
-			this.products = products;
+		public TransactionEntityBuilder withOrders(List<OrderEntity> orders) {
+			this.orders = orders;
 			return this;
 		}
 
 		public TransactionEntity build() {
-			if (customerEntity == null || amount == null || products == null) {
+			if (customerEntity == null) {
 				throw new InvalidCreationException("Incorrect transaction to be created");
 			}
 

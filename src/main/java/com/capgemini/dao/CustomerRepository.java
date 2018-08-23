@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.capgemini.domain.CustomerEntity;
 
-public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> {
+public interface CustomerRepository extends JpaRepository<CustomerEntity, Long>, CustomizedCustomerRepository {
 
 	CustomerEntity findById(Long id);
 

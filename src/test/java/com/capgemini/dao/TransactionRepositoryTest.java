@@ -57,8 +57,8 @@ public class TransactionRepositoryTest {
 		List<PurchasedProductEntity> products = new ArrayList<>();
 		products.add(product1);
 
-		TransactionEntity transaction = new TransactionEntityBuilder().withAmount(15).withCustomerEntity(cust1)
-				.withProducts(products).withTransactionStatus(TransactionStatus.IN_PROGRESS).build();
+		TransactionEntity transaction = new TransactionEntityBuilder().withCustomerEntity(cust1)
+				.withTransactionStatus(TransactionStatus.IN_PROGRESS).build();
 
 		TransactionEntity savedTransaction = transactionRepository.save(transaction);
 
@@ -66,8 +66,7 @@ public class TransactionRepositoryTest {
 		TransactionEntity selectedTransaction = transactionRepository.findById(savedTransaction.getId());
 
 		// then
-		assertThat(savedTransaction.getAmount()).isEqualTo(selectedTransaction.getAmount());
-		assertThat(savedTransaction.getProducts()).isEqualTo(selectedTransaction.getProducts());
+		assertThat(savedTransaction.getCustomerEntity()).isEqualTo(selectedTransaction.getCustomerEntity());
 	}
 
 	@Test
@@ -84,8 +83,8 @@ public class TransactionRepositoryTest {
 		List<PurchasedProductEntity> products = new ArrayList<>();
 		products.add(product1);
 
-		TransactionEntity transaction = new TransactionEntityBuilder().withAmount(15).withCustomerEntity(cust1)
-				.withProducts(products).withTransactionStatus(TransactionStatus.IN_PROGRESS).build();
+		TransactionEntity transaction = new TransactionEntityBuilder().withCustomerEntity(cust1)
+				.withTransactionStatus(TransactionStatus.IN_PROGRESS).build();
 
 		TransactionEntity savedTransaction = transactionRepository.save(transaction);
 		// when

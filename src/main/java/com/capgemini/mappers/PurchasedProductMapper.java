@@ -9,9 +9,9 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Component;
 
+import com.capgemini.domain.OrderEntity;
 import com.capgemini.domain.PurchasedProductEntity;
 import com.capgemini.domain.PurchasedProductEntity.PurchasedProductEntityBuilder;
-import com.capgemini.domain.TransactionEntity;
 import com.capgemini.types.PurchasedProductTO;
 import com.capgemini.types.PurchasedProductTO.PurchasedProductTOBuilder;
 
@@ -28,9 +28,9 @@ public class PurchasedProductMapper {
 				.withVersion(purchasedProductEntity.getVersion()).withId(purchasedProductEntity.getId())
 				.withProductName(purchasedProductEntity.getProductName()).withPrice(purchasedProductEntity.getPrice())
 				.withMargin(purchasedProductEntity.getMargin()).withWeight(purchasedProductEntity.getWeight());
-		if (purchasedProductEntity.getTransactions() != null) {
-			purchasedProductTOBuilder.withTransactions(
-					purchasedProductEntity.getTransactions().stream().map(e -> e.getId()).collect(Collectors.toList()));
+		if (purchasedProductEntity.getOrders() != null) {
+			purchasedProductTOBuilder.withOrders(
+					purchasedProductEntity.getOrders().stream().map(e -> e.getId()).collect(Collectors.toList()));
 
 		}
 		return purchasedProductTOBuilder.build();
@@ -40,11 +40,11 @@ public class PurchasedProductMapper {
 		if (purchasedProductTO == null)
 			return null;
 
-		List<Long> transactions = purchasedProductTO.getTransactions();
-		List<TransactionEntity> listOfTransactions = new ArrayList<>();
-		if (transactions != null) {
-			for (Long id : transactions) {
-				listOfTransactions.add(entityManager.getReference(TransactionEntity.class, id));
+		List<Long> orders = purchasedProductTO.getOrders();
+		List<OrderEntity> listOfOrders = new ArrayList<>();
+		if (orders != null) {
+			for (Long id : orders) {
+				listOfOrders.add(entityManager.getReference(OrderEntity.class, id));
 			}
 		}
 

@@ -11,7 +11,7 @@ public class PurchasedProductTO {
 	private String productName;
 	private Double margin;
 	private Double weight;
-	private List<Long> transactions;
+	private List<Long> orders;
 
 	public PurchasedProductTO() {
 	}
@@ -23,7 +23,7 @@ public class PurchasedProductTO {
 		this.productName = builder.productName;
 		this.margin = builder.margin;
 		this.weight = builder.weight;
-		this.transactions = builder.transactions;
+		this.orders = builder.orders;
 	}
 
 	public Long getVersion() {
@@ -74,12 +74,12 @@ public class PurchasedProductTO {
 		this.weight = weight;
 	}
 
-	public List<Long> getTransactions() {
-		return transactions;
+	public List<Long> getOrders() {
+		return orders;
 	}
 
-	public void setTransactions(List<Long> transactions) {
-		this.transactions = transactions;
+	public void setOrders(List<Long> orders) {
+		this.orders = orders;
 	}
 
 	public static class PurchasedProductTOBuilder {
@@ -89,7 +89,7 @@ public class PurchasedProductTO {
 		private String productName;
 		private Double margin;
 		private Double weight;
-		private List<Long> transactions;
+		private List<Long> orders;
 
 		public PurchasedProductTOBuilder() {
 		}
@@ -124,8 +124,8 @@ public class PurchasedProductTO {
 			return this;
 		}
 
-		public PurchasedProductTOBuilder withTransactions(List<Long> transactions) {
-			this.transactions = transactions;
+		public PurchasedProductTOBuilder withOrders(List<Long> orders) {
+			this.orders = orders;
 			return this;
 		}
 

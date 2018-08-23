@@ -17,4 +17,5 @@ public interface PurchasedProductService {
 	void removeProduct(Long id);
 
 	Long countProducts();
+
 }

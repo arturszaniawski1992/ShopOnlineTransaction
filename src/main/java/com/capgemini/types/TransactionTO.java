@@ -13,7 +13,7 @@ public class TransactionTO {
 	private TransactionStatus transactionStatus;
 	private Integer amount;
 	private Long customerId;
-	private List<Long> products;
+	private List<Long> orders;
 
 	public TransactionTO() {
 	}
@@ -25,7 +25,7 @@ public class TransactionTO {
 		this.transactionStatus = builder.transactionStatus;
 		this.amount = builder.amount;
 		this.customerId = builder.customerId;
-		this.products = builder.products;
+		this.orders = builder.orders;
 	}
 
 	public Long getVersion() {
@@ -76,12 +76,12 @@ public class TransactionTO {
 		this.customerId = customerId;
 	}
 
-	public List<Long> getProducts() {
-		return products;
+	public List<Long> getOrders() {
+		return orders;
 	}
 
-	public void setProducts(List<Long> products) {
-		this.products = products;
+	public void setOrders(List<Long> orders) {
+		this.orders = orders;
 	}
 
 	public static class TransactionTOBuilder {
@@ -91,7 +91,7 @@ public class TransactionTO {
 		private TransactionStatus transactionStatus;
 		private Integer amount;
 		private Long customerId;
-		private List<Long> products;
+		private List<Long> orders;
 
 		public TransactionTOBuilder() {
 		}
@@ -126,13 +126,13 @@ public class TransactionTO {
 			return this;
 		}
 
-		public TransactionTOBuilder withProducts(List<Long> products) {
-			this.products = products;
+		public TransactionTOBuilder withOrders(List<Long> orders) {
+			this.orders = orders;
 			return this;
 		}
 
 		public TransactionTO build() {
-			if (customerId == null || amount == null || products == null) {
+			if (customerId == null || amount == null || orders == null) {
 				throw new InvalidCreationException("Incorrect transaction to be created");
 			}
 

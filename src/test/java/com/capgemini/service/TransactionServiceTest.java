@@ -53,7 +53,7 @@ public class TransactionServiceTest {
 		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
 
 		TransactionTO transaction = new TransactionTOBuilder().withAmount(15).withCustomerId(savedCustomer.getId())
-				.withProducts(products).withTransactionStatus(TransactionStatus.EXECUTED).build();
+				.withTransactionStatus(TransactionStatus.EXECUTED).build();
 		TransactionTO savedTransaction = transactionService.saveTransaction(transaction);
 
 		// when
@@ -85,7 +85,7 @@ public class TransactionServiceTest {
 		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
 
 		TransactionTO transaction = new TransactionTOBuilder().withAmount(15).withCustomerId(savedCustomer.getId())
-				.withProducts(products).withTransactionStatus(TransactionStatus.EXECUTED).build();
+				.withTransactionStatus(TransactionStatus.EXECUTED).build();
 		TransactionTO savedTransaction = transactionService.saveTransaction(transaction);
 
 		// when

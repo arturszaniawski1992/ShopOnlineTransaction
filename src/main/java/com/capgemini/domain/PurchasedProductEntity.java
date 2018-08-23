@@ -10,7 +10,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -40,9 +40,8 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 	private Double margin;
 	@Column(name = "weight", nullable = false)
 	private Double weight;
-
-	@ManyToMany(mappedBy = "products", cascade = CascadeType.REMOVE)
-	private List<TransactionEntity> transactions;
+	@OneToMany(mappedBy = "productEntity", cascade = CascadeType.REMOVE)
+	private List<OrderEntity> orders;
 
 	public PurchasedProductEntity() {
 	}
@@ -54,7 +53,8 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 		this.productName = builder.productName;
 		this.margin = builder.margin;
 		this.weight = builder.weight;
-		this.transactions = builder.transactions;
+		this.orders = builder.orders;
+
 	}
 
 	public Long getVersion() {
@@ -105,12 +105,12 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 		this.weight = weight;
 	}
 
-	public List<TransactionEntity> getTransactions() {
-		return transactions;
+	public List<OrderEntity> getOrders() {
+		return orders;
 	}
 
-	public void setTransactions(List<TransactionEntity> transactions) {
-		this.transactions = transactions;
+	public void setOrders(List<OrderEntity> orders) {
+		this.orders = orders;
 	}
 
 	public static class PurchasedProductEntityBuilder {
@@ -120,7 +120,7 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 		private String productName;
 		private Double margin;
 		private Double weight;
-		private List<TransactionEntity> transactions;
+		private List<OrderEntity> orders;
 
 		public PurchasedProductEntityBuilder() {
 		}
@@ -155,8 +155,8 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 			return this;
 		}
 
-		public PurchasedProductEntityBuilder withTransactions(List<TransactionEntity> transactions) {
-			this.transactions = transactions;
+		public PurchasedProductEntityBuilder withOrders(List<OrderEntity> orders) {
+			this.orders = orders;
 			return this;
 		}
 

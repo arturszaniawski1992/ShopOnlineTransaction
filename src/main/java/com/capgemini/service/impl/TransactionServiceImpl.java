@@ -53,7 +53,6 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public TransactionTO updateTransaction(TransactionTO transactionTO) {
 		TransactionEntity transactionEntity = transactionRepository.findById(transactionTO.getCustomerId());
-		transactionEntity.setAmount(transactionTO.getAmount());
 		transactionEntity.setDateTransaction(transactionTO.getDateTransaction());
 		transactionEntity.setTransactionStatus(transactionTO.getTransactionStatus());
 		transactionRepository.save(transactionEntity);
