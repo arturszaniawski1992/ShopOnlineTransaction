@@ -14,4 +14,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
 	void deleteById(Long id);
 
+	OrderEntity findByAmount(Long amount);
+
 }

@@ -30,7 +30,7 @@ public class OrderEntity extends AbstractEntity implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	@Column(length = 50, nullable = false)
+	@Column(nullable = false)
 	private Integer amount;
 	@ManyToOne
 	@JoinColumn(name = "id_product")

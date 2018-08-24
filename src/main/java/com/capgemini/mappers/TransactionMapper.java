@@ -49,9 +49,7 @@ public class TransactionMapper {
 				listOfProductOrders.add(entityManager.getReference(TransactionEntity.class, id));
 			}
 		}
-		CustomerEntity customerEntity = new CustomerEntity();
-		CustomerEntity customer = entityManager.getReference(CustomerEntity.class, customerEntity.getId());
-
+		CustomerEntity customer = entityManager.getReference(CustomerEntity.class, transactionTO.getCustomerId());
 		TransactionEntityBuilder transactionEntityBuilder = new TransactionEntityBuilder()
 				.withVersion(transactionTO.getVersion()).withId(transactionTO.getId()).withCustomerEntity(customer)
 				.withDateTransaction(transactionTO.getDateTransaction())

@@ -132,7 +132,7 @@ public class TransactionTO {
 		}
 
 		public TransactionTO build() {
-			if (customerId == null || amount == null || orders == null) {
+			if (customerId == null) {
 				throw new InvalidCreationException("Incorrect transaction to be created");
 			}
 

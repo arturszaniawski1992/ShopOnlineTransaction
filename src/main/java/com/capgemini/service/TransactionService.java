@@ -14,5 +14,4 @@ public interface TransactionService {
 
 	TransactionTO saveTransaction(TransactionTO transactionTO);
 
-	void removeTransaction(Long id);
 }

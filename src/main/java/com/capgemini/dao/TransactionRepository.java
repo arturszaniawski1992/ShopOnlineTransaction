@@ -16,4 +16,5 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
 	void deleteByTransactionStatus(TransactionStatus transactionStatus);
 
 	void deleteById(Long id);
+
 }

@@ -3,6 +3,7 @@ package com.capgemini.service;
 import java.util.List;
 
 import com.capgemini.types.CustomerTO;
+import com.capgemini.types.TransactionTO;
 
 public interface CustomerService {
 
@@ -15,4 +16,5 @@ public interface CustomerService {
 	CustomerTO saveCustomer(CustomerTO customerTO);
 
 	void removeClient(Long id);
+
 }

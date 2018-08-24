@@ -15,4 +15,6 @@ public interface OrderService {
 
 	void removeOrder(Long id);
 
+	OrderTO findByAmount(Long amount);
+
 }

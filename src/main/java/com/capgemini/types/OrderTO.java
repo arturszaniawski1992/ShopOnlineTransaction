@@ -80,11 +80,6 @@ public class OrderTO {
 			return this;
 		}
 
-		public OrderTOBuilder withProductTO(Integer amount) {
-			this.amount = amount;
-			return this;
-		}
-
 		public OrderTOBuilder withAmount(Integer amount) {
 			this.amount = amount;
 			return this;

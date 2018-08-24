@@ -26,7 +26,7 @@ import com.capgemini.listeners.InsertListener;
 import com.capgemini.listeners.UpdateListener;
 
 @Entity
-@Table(name = "transaction")
+@Table(name = "transactions")
 @EntityListeners({ UpdateListener.class, InsertListener.class })
 public class TransactionEntity extends AbstractEntity implements Serializable {
 
@@ -38,7 +38,7 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 	public Long version;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@DateTimeFormat
 	LocalDateTime dateTransaction;
@@ -83,12 +83,13 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 		return dateTransaction;
 	}
 
-	public void setDateTransaction(LocalDateTime dateTransaction) {
-		this.dateTransaction = dateTransaction;
-	}
-
 	public TransactionStatus getTransactionStatus() {
 		return transactionStatus;
+	}
+
+	public void setDateTransaction(LocalDateTime dateTransaction) {
+		this.dateTransaction = dateTransaction;
+
 	}
 
 	public void setTransactionStatus(TransactionStatus transactionStatus) {
@@ -161,4 +162,5 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 		}
 
 	}
+
 }

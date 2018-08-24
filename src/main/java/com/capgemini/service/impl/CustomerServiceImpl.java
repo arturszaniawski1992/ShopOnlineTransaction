@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.dao.CustomerRepository;
+import com.capgemini.dao.TransactionRepository;
 import com.capgemini.domain.CustomerEntity;
 import com.capgemini.mappers.AdressMapper;
 import com.capgemini.mappers.CustomerMapper;
+import com.capgemini.mappers.TransactionMapper;
 import com.capgemini.service.CustomerService;
 import com.capgemini.types.CustomerTO;
 
@@ -18,9 +20,17 @@ public class CustomerServiceImpl implements CustomerService {
 
 	private final CustomerMapper customerMapper;
 
-	public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper) {
+	private final TransactionRepository transactionRepository;
+
+	private final TransactionMapper transactionMappers;
+
+	public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper,
+			TransactionRepository transactionRepository, TransactionMapper transactionMappers) {
+		super();
 		this.customerRepository = customerRepository;
 		this.customerMapper = customerMapper;
+		this.transactionRepository = transactionRepository;
+		this.transactionMappers = transactionMappers;
 	}
 
 	@Override

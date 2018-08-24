@@ -80,7 +80,7 @@ public class PurchasedProductServiceTest {
 		purchasedProductService.removeProduct(product1.getId());
 
 		// then
-		assertEquals(3, products.size());
+		assertEquals(4, products.size());
 
 	}
 }

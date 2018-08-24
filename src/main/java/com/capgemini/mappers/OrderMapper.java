@@ -24,24 +24,40 @@ public class OrderMapper {
 		if (orderEntity == null)
 			return null;
 
-		return new OrderTOBuilder().withId(orderEntity.getId()).withVersion(orderEntity.getId())
-				.withAmount(orderEntity.getAmount()).withProductTOId(orderEntity.getProductEntity().getId())
-				.withTransactionTO(orderEntity.getTransactionEntity().getId()).build();
+		OrderTOBuilder orderEntityBuilder = new OrderTOBuilder().withId(orderEntity.getId())
+				.withVersion(orderEntity.getVersion()).withAmount(orderEntity.getAmount());
+
+		if (orderEntity.getTransactionEntity() != null) {
+			if (orderEntity.getTransactionEntity().getId() != null)
+				orderEntityBuilder.withTransactionTO(orderEntity.getTransactionEntity().getId());
+		}
+		if (orderEntity.getProductEntity() != null) {
+			if (orderEntity.getProductEntity().getId() != null) {
+				orderEntityBuilder.withProductTOId(orderEntity.getProductEntity().getId());
+			}
+		}
+		return orderEntityBuilder.build();
 
 	}
 
 	public OrderEntity toOrderEntity(OrderTO orderTO) {
 		if (orderTO == null)
 			return null;
-		PurchasedProductEntity product = entityManager.getReference(PurchasedProductEntity.class,
-				orderTO.getProductTOId());
 
-		TransactionEntity transaction = entityManager.getReference(TransactionEntity.class,
-				orderTO.getTransactionTOId());
+		OrderEntityBuilder orderEntityBuilder = new OrderEntityBuilder().withVersion(orderTO.getVersion())
+				.withId(orderTO.getId()).withAmount(orderTO.getAmount());
 
-		return new OrderEntityBuilder().withVersion(orderTO.getVersion()).withId(orderTO.getVersion())
-				.withAmount(orderTO.getAmount()).withProductEntity(product).withTransactionEntity(transaction).build();
-
+		if (orderTO.getTransactionTOId() != null) {
+			TransactionEntity transaction = entityManager.getReference(TransactionEntity.class,
+					orderTO.getTransactionTOId());
+			orderEntityBuilder.withTransactionEntity(transaction);
+		}
+		if (orderTO.getProductTOId() != null) {
+			PurchasedProductEntity product = entityManager.getReference(PurchasedProductEntity.class,
+					orderTO.getProductTOId());
+			orderEntityBuilder.withProductEntity(product);
+		}
+		return orderEntityBuilder.build();
 	}
 
 	public List<OrderTO> map2TOs(List<OrderEntity> orderEntities) {
