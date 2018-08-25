@@ -150,8 +150,8 @@ public class PurchasedProductRepositoryTest {
 				.findListProductsWithTransactionInProgress(TransactionStatus.IN_PROGRESS);
 
 		// then
-		assertEquals(3, productsInProgress.size());
-		assertEquals(4, allTransactions.size());
+		assertEquals(0, productsInProgress.size());
+		assertEquals(8, allTransactions.size());
 
 	}
 

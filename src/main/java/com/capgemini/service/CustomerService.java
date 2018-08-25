@@ -7,14 +7,18 @@ import com.capgemini.types.TransactionTO;
 
 public interface CustomerService {
 
-	CustomerTO findCustomerById(Long id);
+	public CustomerTO findCustomerById(Long id);
 
-	List<CustomerTO> findAllCustomers();
+	public List<CustomerTO> findAllCustomers();
 
-	CustomerTO updateCustomer(CustomerTO customerTO);
+	public CustomerTO updateCustomer(CustomerTO customerTO);
 
-	CustomerTO saveCustomer(CustomerTO customerTO);
+	public CustomerTO saveCustomer(CustomerTO customerTO);
 
 	void removeClient(Long id);
 
+	public CustomerTO assignTransaction(CustomerTO customerTO, TransactionTO transactionTO);
+
+	public List<CustomerTO> findTopThreeClientsWhoSpentTheMostInPeriod(short mounthFrom, short yearFrom, short mounthTo,
+			short yearTo, int amountOfClients);
 }

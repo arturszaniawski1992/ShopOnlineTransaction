@@ -2,6 +2,8 @@ package com.capgemini.service.impl;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import com.capgemini.dao.CustomerRepository;
@@ -12,42 +14,36 @@ import com.capgemini.domain.CustomerEntity;
 import com.capgemini.domain.OrderEntity;
 import com.capgemini.domain.PurchasedProductEntity;
 import com.capgemini.domain.TransactionEntity;
+import com.capgemini.enums.TransactionStatus;
 import com.capgemini.exception.TransactionNotAllowedException;
-import com.capgemini.mappers.CustomerMapper;
-import com.capgemini.mappers.OrderMapper;
-import com.capgemini.mappers.PurchasedProductMapper;
 import com.capgemini.mappers.TransactionMapper;
 import com.capgemini.service.TransactionService;
+import com.capgemini.types.CustomerTO;
+import com.capgemini.types.TransactionSearchCriteria;
 import com.capgemini.types.TransactionTO;
 
 @Service
+@Transactional
 public class TransactionServiceImpl implements TransactionService {
 
 	private final CustomerRepository customerRepository;
-	private final CustomerMapper customerMapper;
 
 	private final TransactionRepository transactionRepository;
 	private final TransactionMapper transactionMapper;
 
 	private final PurchasedProductRepository purchasedProductRepository;
-	private final PurchasedProductMapper purchasedProductMapper;
 
 	private final OrderRepository orderRepository;
-	private final OrderMapper orderMapper;
 
-	public TransactionServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper,
-			TransactionRepository transactionRepository, TransactionMapper transactionMapper,
-			PurchasedProductRepository purchasedProductRepository, PurchasedProductMapper purchasedProductMapper,
-			OrderRepository orderRepository, OrderMapper orderMapper) {
+	public TransactionServiceImpl(CustomerRepository customerRepository, TransactionRepository transactionRepository,
+			TransactionMapper transactionMapper, PurchasedProductRepository purchasedProductRepository,
+			OrderRepository orderRepository) {
 		super();
 		this.customerRepository = customerRepository;
-		this.customerMapper = customerMapper;
 		this.transactionRepository = transactionRepository;
 		this.transactionMapper = transactionMapper;
 		this.purchasedProductRepository = purchasedProductRepository;
-		this.purchasedProductMapper = purchasedProductMapper;
 		this.orderRepository = orderRepository;
-		this.orderMapper = orderMapper;
 	}
 
 	private void checkIfTransactionIsAllowed(CustomerEntity customerEntity, List<PurchasedProductEntity> products)
@@ -123,4 +119,26 @@ public class TransactionServiceImpl implements TransactionService {
 		return transactionMapper.toTransactionTO(transactionEntity);
 	}
 
+	@Override
+	public TransactionTO assignCustomer(TransactionTO savedTransaction, CustomerTO savedCustomer) {
+		return transactionMapper.toTransactionTO(
+				transactionRepository.assignCustomer(transactionRepository.getOne(savedTransaction.getId()),
+						customerRepository.getOne(savedCustomer.getId())));
+	}
+
+	@Override
+	public Double getTotalAmountOfTransactionsWithStatus(Long customerId, TransactionStatus status) {
+		return transactionRepository.getTotalAmountOfTransactionsWithStatus(customerId, status);
+
+	}
+
+	@Override
+	public List<TransactionTO> searchForTransactionsBySearchCriteria(TransactionSearchCriteria searchCriteria) {
+		return transactionMapper.map2TOs(transactionRepository.searchForTransactionsBySearchCriteria(searchCriteria));
+	}
+
+	@Override
+	public double calculateProfitFromPeriod(short mounthFrom, short yearFrom, short mounthTo, short yearTo) {
+		return transactionRepository.calculateProfitFromPeriod(mounthFrom, yearFrom, mounthTo, yearTo);
+	}
 }

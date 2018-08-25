@@ -2,8 +2,10 @@ package com.capgemini.domain;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.annotations.Column;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -44,11 +46,13 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 	LocalDateTime dateTransaction;
 	@Enumerated(EnumType.STRING)
 	private TransactionStatus transactionStatus;
+	@Column
+	Integer amount;
 	@ManyToOne
 	@JoinColumn(name = "id_client")
 	private CustomerEntity customerEntity;
 	@OneToMany(mappedBy = "transactionEntity", cascade = CascadeType.REMOVE)
-	private List<OrderEntity> orders;
+	private List<OrderEntity> orders = new ArrayList<>();
 
 	public TransactionEntity() {
 	}
@@ -56,6 +60,7 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 	public TransactionEntity(TransactionEntityBuilder builder) {
 		this.version = builder.version;
 		this.id = builder.id;
+		this.amount = builder.amount;
 		this.dateTransaction = builder.dateTransaction;
 		this.transactionStatus = builder.transactionStatus;
 		this.customerEntity = builder.customerEntity;
@@ -83,6 +88,14 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 		return dateTransaction;
 	}
 
+	public Integer getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Integer amount) {
+		this.amount = amount;
+	}
+
 	public TransactionStatus getTransactionStatus() {
 		return transactionStatus;
 	}
@@ -102,6 +115,7 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 
 	public void setCustomerEntity(CustomerEntity customerEntity) {
 		this.customerEntity = customerEntity;
+		customerEntity.addTransaction(this);
 	}
 
 	public List<OrderEntity> getOrders() {
@@ -115,6 +129,7 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 	public static class TransactionEntityBuilder {
 		private Long version;
 		private Long id;
+		private Integer amount;
 		LocalDateTime dateTransaction;
 		private TransactionStatus transactionStatus;
 		private CustomerEntity customerEntity;
@@ -125,6 +140,11 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 
 		public TransactionEntityBuilder withVersion(Long version) {
 			this.version = version;
+			return this;
+		}
+
+		public TransactionEntityBuilder withAmount(Integer amount) {
+			this.amount = amount;
 			return this;
 		}
 
@@ -161,6 +181,25 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 			return new TransactionEntity(this);
 		}
 
+	}
+
+	public void removeCustomer() {
+		customerEntity.removeTransaction(this);
+		this.customerEntity = null;
+	}
+
+	public boolean addOrder(OrderEntity orderEntity) {
+		if (orders == null) {
+			orders = new ArrayList<>();
+		}
+		return orders.add(orderEntity);
+	}
+
+	public boolean removeOrder(OrderEntity orderEntity) {
+		if (orders == null) {
+			return false;
+		}
+		return orders.remove(orderEntity);
 	}
 
 }

@@ -15,10 +15,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.capgemini.domain.CustomerEntity;
 import com.capgemini.domain.OrderEntity;
 import com.capgemini.domain.OrderEntity.OrderEntityBuilder;
 import com.capgemini.domain.PurchasedProductEntity;
+import com.capgemini.domain.CustomerEntity.CustomerEntityBuilder;
 import com.capgemini.domain.PurchasedProductEntity.PurchasedProductEntityBuilder;
+import com.capgemini.embeded.AdressData;
+import com.capgemini.embeded.AdressData.AdressDataEntityBuilder;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = "spring.profiles.active=hsql")
@@ -78,4 +82,28 @@ public class OrderRepositoryTest {
 
 	}
 
+	@Test
+	public void shouldRemoveOrderById() {
+		// given
+		PurchasedProductEntity product1 = new PurchasedProductEntityBuilder().withMargin(12.0).withProductName("ball")
+				.withPrice(125.0).withWeight(12.0).build();
+		PurchasedProductEntity product2 = new PurchasedProductEntityBuilder().withMargin(12.0).withProductName("ball")
+				.withPrice(125.0).withWeight(12.0).build();
+
+		PurchasedProductEntity saveProduct1 = purchasedProductRepository.save(product1);
+		PurchasedProductEntity saveProduct2 = purchasedProductRepository.save(product2);
+
+		OrderEntity order1 = new OrderEntityBuilder().withAmount(2).withProductEntity(saveProduct1).build();
+		OrderEntity order2 = new OrderEntityBuilder().withAmount(5).withProductEntity(saveProduct2).build();
+		OrderEntity order3 = new OrderEntityBuilder().withAmount(2).withProductEntity(saveProduct1).build();
+		OrderEntity savedOrder1 = orderRepository.save(order1);
+		orderRepository.save(order2);
+		orderRepository.save(order3);
+
+		// when
+
+		orderRepository.deleteById(savedOrder1.getId());
+		// then
+		assertEquals(2, orderRepository.findAll().size());
+	}
 }

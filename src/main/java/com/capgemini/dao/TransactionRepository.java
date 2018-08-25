@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.capgemini.dao.customize.CustomizedTransactionRepository;
 import com.capgemini.domain.TransactionEntity;
 import com.capgemini.enums.TransactionStatus;
 
-public interface TransactionRepository extends JpaRepository<TransactionEntity, Long> {
+public interface TransactionRepository extends JpaRepository<TransactionEntity, Long>, CustomizedTransactionRepository {
 
 	TransactionEntity findById(Long id);
 

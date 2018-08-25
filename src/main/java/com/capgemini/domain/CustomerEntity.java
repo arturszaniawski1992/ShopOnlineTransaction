@@ -2,6 +2,7 @@ package com.capgemini.domain;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -50,7 +51,7 @@ public class CustomerEntity extends AbstractEntity implements Serializable {
 	private AdressData adressData;
 
 	@OneToMany(mappedBy = "customerEntity", cascade = CascadeType.REMOVE)
-	private List<TransactionEntity> transactions;
+	private List<TransactionEntity> transactions = new ArrayList<>();
 
 	/**
 	 * Default constructor for customer entity.
@@ -276,5 +277,19 @@ public class CustomerEntity extends AbstractEntity implements Serializable {
 			return new CustomerEntity(this);
 		}
 
+	}
+
+	public boolean addTransaction(TransactionEntity transaction) {
+		if (transactions == null) {
+			transactions = new ArrayList<>();
+		}
+		return transactions.add(transaction);
+	}
+
+	public boolean removeTransaction(TransactionEntity transaction) {
+		if (transactions != null) {
+			return transactions.remove(transaction);
+		}
+		return false;
 	}
 }

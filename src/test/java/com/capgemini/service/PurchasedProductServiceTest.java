@@ -13,7 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.capgemini.types.AdressDataTO;
+import com.capgemini.types.CustomerTO;
 import com.capgemini.types.PurchasedProductTO;
+import com.capgemini.types.AdressDataTO.AdressDataTOBuilder;
+import com.capgemini.types.CustomerTO.CustomerTOBuilder;
 import com.capgemini.types.PurchasedProductTO.PurchasedProductTOBuilder;
 
 @RunWith(SpringRunner.class)
@@ -82,5 +86,25 @@ public class PurchasedProductServiceTest {
 		// then
 		assertEquals(4, products.size());
 
+	}
+
+	@Test
+	public void shouldUpdateProduct() {
+		// given
+
+		Double newPrice = 15.0;
+		PurchasedProductTO product = new PurchasedProductTOBuilder().withMargin(1.0).withPrice(12.0)
+				.withProductName("ball").withWeight(12.0).build();
+		PurchasedProductTO savedProduct = purchasedProductService.savePurchasedProduct(product);
+
+		// when
+		savedProduct.setPrice(newPrice);
+		PurchasedProductTO updatedProduct = purchasedProductService.updateProduct(savedProduct);
+		List<PurchasedProductTO> products = purchasedProductService.findAllPurchasedProducts();
+
+		// then
+		assertThat(updatedProduct.getPrice().equals(newPrice));
+		assertThat(updatedProduct.getId()).isEqualTo(savedProduct.getId());
+		assertThat(products.size()).isEqualTo(1);
 	}
 }

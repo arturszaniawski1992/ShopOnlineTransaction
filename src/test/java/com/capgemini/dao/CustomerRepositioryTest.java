@@ -253,5 +253,6 @@ public class CustomerRepositioryTest {
 				(short) 2018, (short) 4, (short) 2018, 3);
 
 		// then
+
 	}
 }

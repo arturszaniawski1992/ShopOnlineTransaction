@@ -24,6 +24,8 @@ public class QTransactionEntity extends EntityPathBase<TransactionEntity> {
 
     public final QAbstractEntity _super = new QAbstractEntity(this);
 
+    public final NumberPath<Integer> amount = createNumber("amount", Integer.class);
+
     //inherited
     public final DateTimePath<java.util.Date> createdTime = _super.createdTime;
 

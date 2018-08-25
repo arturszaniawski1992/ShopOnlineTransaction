@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class StarterKitJpaStarterApplication {
 
 	public static void main(String[] args) {
-		// Uncomment line below to use mysql database (default database name = jstk, user = jstk, pass = jstk)
+		// Uncomment line below to use mysql database (default database name =
+		// jstk, user = jstk, pass = jstk)
 		// you can change this in application-mysql.properties
 		System.setProperty("spring.profiles.active", "mysql");
 

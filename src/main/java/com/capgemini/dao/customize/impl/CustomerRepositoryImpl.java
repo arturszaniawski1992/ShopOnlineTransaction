@@ -15,6 +15,7 @@ import com.capgemini.domain.QCustomerEntity;
 import com.capgemini.domain.QOrderEntity;
 import com.capgemini.domain.QPurchasedProductEntity;
 import com.capgemini.domain.QTransactionEntity;
+import com.capgemini.domain.TransactionEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Repository
@@ -22,6 +23,12 @@ public class CustomerRepositoryImpl implements CustomizedCustomerRepository {
 
 	@Autowired
 	EntityManager entityManager;
+
+	@Override
+	public CustomerEntity assignTransaction(CustomerEntity customerEntity, TransactionEntity transactionEntity) {
+		customerEntity.addTransaction(transactionEntity);
+		return customerEntity;
+	}
 
 	@Override
 	public List<CustomerEntity> findTopThreeClientsWhoSpentTheMostInPeriod(short mounthFrom, short yearFrom,
@@ -47,5 +54,5 @@ public class CustomerRepositoryImpl implements CustomizedCustomerRepository {
 		return topThreeClients;
 
 	}
-		
+
 }

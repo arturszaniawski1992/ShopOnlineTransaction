@@ -2,20 +2,25 @@ package com.capgemini.service;
 
 import java.util.List;
 
+import com.capgemini.enums.TransactionStatus;
 import com.capgemini.types.PurchasedProductTO;
 
 public interface PurchasedProductService {
 
-	PurchasedProductTO findPurchasedProductById(Long id);
+	public PurchasedProductTO findPurchasedProductById(Long id);
 
-	List<PurchasedProductTO> findAllPurchasedProducts();
+	public List<PurchasedProductTO> findAllPurchasedProducts();
 
-	PurchasedProductTO updateProduct(PurchasedProductTO purchasedProductTO);
+	public PurchasedProductTO updateProduct(PurchasedProductTO purchasedProductTO);
 
-	PurchasedProductTO savePurchasedProduct(PurchasedProductTO purchasedProductTO);
+	public PurchasedProductTO savePurchasedProduct(PurchasedProductTO purchasedProductTO);
 
 	void removeProduct(Long id);
 
-	Long countProducts();
+	public Long countProducts();
+
+	public List<PurchasedProductTO> findListProductsWithTransactionInProgress(TransactionStatus transactionStatus);
+
+	public List<PurchasedProductTO> getBestSellingProducts(int amount);
 
 }

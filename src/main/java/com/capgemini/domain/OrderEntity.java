@@ -134,4 +134,24 @@ public class OrderEntity extends AbstractEntity implements Serializable {
 		}
 	}
 
+	public void assignTransaction(TransactionEntity transactionEntity) {
+		this.transactionEntity = transactionEntity;
+		transactionEntity.addOrder(this);
+	}
+
+	public void removeTransaction() {
+		transactionEntity.removeOrder(this);
+		transactionEntity = null;
+	}
+
+	public void assignProduct(PurchasedProductEntity productEntity) {
+		this.productEntity = productEntity;
+		productEntity.addOrder(this);
+	}
+
+	public void removeProduct() {
+		productEntity.removeTransaction(this);
+		productEntity = null;
+	}
+
 }

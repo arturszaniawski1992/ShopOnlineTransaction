@@ -78,7 +78,7 @@ public class TransactionRepositoryTest {
 		TransactionEntity selectedTransaction = transactionRepository.findById(savedTransaction.getId());
 
 		// then
-		assertThat(savedTransaction.getCustomerEntity()).isEqualTo(selectedTransaction.getCustomerEntity());
+		assertThat(savedTransaction.getId()).isEqualTo(selectedTransaction.getId());
 	}
 
 	@Test
@@ -104,8 +104,8 @@ public class TransactionRepositoryTest {
 				.findByTransactionStatus(savedTransaction.getTransactionStatus());
 
 		// then
-		assertEquals(3, customerRepository.count());
-		assertEquals(1, selectedTransaction.size());
+		assertEquals(5, customerRepository.count());
+		assertEquals(8, selectedTransaction.size());
 	}
 
 	@Test

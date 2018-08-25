@@ -1,6 +1,7 @@
 package com.capgemini.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -41,7 +42,7 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 	@Column(name = "weight", nullable = false)
 	private Double weight;
 	@OneToMany(mappedBy = "productEntity", cascade = CascadeType.REMOVE)
-	private List<OrderEntity> orders;
+	private List<OrderEntity> orders = new ArrayList<>();
 
 	public PurchasedProductEntity() {
 	}
@@ -167,6 +168,20 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 
 			return new PurchasedProductEntity(this);
 		}
+	}
+
+	public boolean addOrder(OrderEntity orderEntity) {
+		if (orders == null) {
+			orders = new ArrayList<>();
+		}
+		return orders.add(orderEntity);
+	}
+
+	public boolean removeTransaction(OrderEntity orderEntity) {
+		if (orders == null) {
+			return false;
+		}
+		return orders.remove(orderEntity);
 	}
 
 }
