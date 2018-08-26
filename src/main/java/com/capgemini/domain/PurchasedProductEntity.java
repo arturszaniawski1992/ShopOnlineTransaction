@@ -117,6 +117,32 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 		this.orders = orders;
 	}
 
+	/**
+	 * This is the method which add order to product.
+	 * 
+	 * @param OrderEntity
+	 *            as order.
+	 */
+	public boolean addOrder(OrderEntity orderEntity) {
+		if (orders == null) {
+			orders = new ArrayList<>();
+		}
+		return orders.add(orderEntity);
+	}
+
+	/**
+	 * This is the method which remove order from product.
+	 * 
+	 * @param OrderEntity
+	 *            as order.
+	 */
+	public boolean removeOrder(OrderEntity orderEntity) {
+		if (orders == null) {
+			return false;
+		}
+		return orders.remove(orderEntity);
+	}
+
 	public static class PurchasedProductEntityBuilder {
 		private Long version;
 		private Long id;
@@ -126,44 +152,105 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 		private Double weight;
 		private List<OrderEntity> orders;
 
+		/**
+		 * Default constructor for product entity builder.
+		 *
+		 */
 		public PurchasedProductEntityBuilder() {
 		}
 
+		/**
+		 * This is the method which add version to product.
+		 * 
+		 * @param Long
+		 *            as version of product.
+		 * @return Version of product.
+		 */
 		public PurchasedProductEntityBuilder withVersion(Long version) {
 			this.version = version;
 			return this;
 		}
 
+		/**
+		 * This is the method which add id to product.
+		 * 
+		 * @param Long
+		 *            as id of product.
+		 * @return Id of product.
+		 */
 		public PurchasedProductEntityBuilder withId(Long id) {
 			this.id = id;
 			return this;
 		}
 
+		/**
+		 * This is the method which add price to product.
+		 * 
+		 * @param Double
+		 *            as price name.
+		 * @return Price of product.
+		 */
 		public PurchasedProductEntityBuilder withPrice(Double price) {
 			this.price = price;
 			return this;
 		}
 
+		/**
+		 * This is the method which add name to product.
+		 * 
+		 * @param String
+		 *            as product name.
+		 * @return name of product.
+		 */
 		public PurchasedProductEntityBuilder withProductName(String productName) {
 			this.productName = productName;
 			return this;
 		}
 
+		/**
+		 * This is the method which add margin to product.
+		 * 
+		 * @param Double
+		 *            as margin of product.
+		 * @return margin of product.
+		 */
 		public PurchasedProductEntityBuilder withMargin(Double margin) {
 			this.margin = margin;
 			return this;
 		}
 
+		/**
+		 * This is the method which add weight to product.
+		 * 
+		 * @param Double
+		 *            as weight of product.
+		 * @return weith of product.
+		 */
 		public PurchasedProductEntityBuilder withWeight(Double weight) {
 			this.weight = weight;
 			return this;
 		}
 
+		/**
+		 * This is the method which add transactions to product.
+		 * 
+		 * @param List
+		 *            of TransactionEntity as transactions.
+		 * @return Orders of product.
+		 */
 		public PurchasedProductEntityBuilder withOrders(List<OrderEntity> orders) {
 			this.orders = orders;
 			return this;
 		}
 
+		/**
+		 * This is the method which build product entity and if there is no
+		 * demanded params throw exception.
+		 * 
+		 * @param Obligatory
+		 *            String price, String productName, Double weight.
+		 * @return Customer entity.
+		 */
 		public PurchasedProductEntity build() {
 			if (price == null || productName == null || weight == null) {
 				throw new InvalidCreationException("Incorrect purchased product to be created");
@@ -171,20 +258,6 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 
 			return new PurchasedProductEntity(this);
 		}
-	}
-
-	public boolean addOrder(OrderEntity orderEntity) {
-		if (orders == null) {
-			orders = new ArrayList<>();
-		}
-		return orders.add(orderEntity);
-	}
-
-	public boolean removeTransaction(OrderEntity orderEntity) {
-		if (orders == null) {
-			return false;
-		}
-		return orders.remove(orderEntity);
 	}
 
 }

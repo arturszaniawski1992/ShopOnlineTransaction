@@ -100,34 +100,81 @@ public class OrderEntity extends AbstractEntity implements Serializable {
 		private PurchasedProductEntity productEntity;
 		private TransactionEntity transactionEntity;
 
+		/**
+		 * Default constructor for order entity builder.
+		 *
+		 */
 		public OrderEntityBuilder() {
 		}
 
+		/**
+		 * This is the method which add version to order.
+		 * 
+		 * @param Long
+		 *            as version for order.
+		 * @return Id of order.
+		 */
 		public OrderEntityBuilder withVersion(Long version) {
 			this.version = version;
 			return this;
 		}
 
+		/**
+		 * This is the method which add id to order.
+		 * 
+		 * @param Long
+		 *            as id for order.
+		 * @return Id of order.
+		 */
 		public OrderEntityBuilder withId(Long id) {
 			this.id = id;
 			return this;
 		}
 
+		/**
+		 * This is the method which add amount to order.
+		 * 
+		 * @param Integer
+		 *            as amount for order.
+		 * @return Amount of order.
+		 */
 		public OrderEntityBuilder withAmount(Integer amount) {
 			this.amount = amount;
 			return this;
 		}
 
+		/**
+		 * This is the method which add product to order.
+		 * 
+		 * @param PurchasedProductEntity
+		 *            as product for order.
+		 * @return Product of order.
+		 */
 		public OrderEntityBuilder withProductEntity(PurchasedProductEntity productEntity) {
 			this.productEntity = productEntity;
 			return this;
 		}
 
+		/**
+		 * This is the method which add transaction to order.
+		 * 
+		 * @param TransactionEntity
+		 *            as transaction for order.
+		 * @return Transaction of order.
+		 */
 		public OrderEntityBuilder withTransactionEntity(TransactionEntity transactionEntity) {
 			this.transactionEntity = transactionEntity;
 			return this;
 		}
 
+		/**
+		 * This is the method which build order entity and if there is no
+		 * demanded params throw exception.
+		 * 
+		 * @param Obligatory
+		 *            String amount.
+		 * @return Customer entity.
+		 */
 		public OrderEntity build() {
 			if (amount == null) {
 				throw new InvalidCreationException("Incorrect order to be created");
@@ -137,23 +184,47 @@ public class OrderEntity extends AbstractEntity implements Serializable {
 		}
 	}
 
+	/**
+	 * This is the method which assign order to transaction.
+	 * 
+	 * @param TransactionEntity
+	 *            as transaction for order.
+	 */
 	public void assignTransaction(TransactionEntity transactionEntity) {
 		this.transactionEntity = transactionEntity;
 		transactionEntity.addOrder(this);
 	}
 
+	/**
+	 * This is the method which remove order from transaction.
+	 * 
+	 * @param TransactionEntity
+	 *            as transaction for order.
+	 */
 	public void removeTransaction() {
 		transactionEntity.removeOrder(this);
 		transactionEntity = null;
 	}
 
+	/**
+	 * This is the method which assign order to product.
+	 * 
+	 * @param TransactionEntity
+	 *            as transaction for order.
+	 */
 	public void assignProduct(PurchasedProductEntity productEntity) {
 		this.productEntity = productEntity;
 		productEntity.addOrder(this);
 	}
 
+	/**
+	 * This is the method which remove order from product.
+	 * 
+	 * @param TransactionEntity
+	 *            as transaction for order.
+	 */
 	public void removeProduct() {
-		productEntity.removeTransaction(this);
+		productEntity.removeOrder(this);
 		productEntity = null;
 	}
 

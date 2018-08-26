@@ -424,6 +424,8 @@ public class TransactionServiceTest {
 		Date dateFrom = java.sql.Date.valueOf("1992-11-15");
 		Date dateTo = java.sql.Date.valueOf("2018-11-15");
 		// when
+		transactionService.saveTransaction(transaction1);
+		transactionService.saveTransaction(transaction2);
 		Double result = transactionService.calculateProfitFromPeriod(dateFrom, dateTo);
 		// then
 		assertEquals(125.0, result, 0.001);
@@ -481,4 +483,10 @@ public class TransactionServiceTest {
 		assertEquals(20.0, result1, 0.001);
 		assertEquals(30.0, result2, 0.001);
 	}
+
+	@Test(expected = TransactionNotAllowedException.class)
+	public void shoudlThrowTransactionNotAllowed() {
+
+	}
+
 }

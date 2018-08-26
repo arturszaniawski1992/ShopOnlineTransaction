@@ -128,6 +128,41 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 		this.orders = orders;
 	}
 
+	/**
+	 * This is the method which remove customer from transaction.
+	 * 
+	 */
+	public void removeCustomer() {
+		customerEntity.removeTransaction(this);
+		this.customerEntity = null;
+	}
+
+	/**
+	 * This is the method which add order to transaction.
+	 * 
+	 * @param OrderEntity
+	 *            as order for transaction.
+	 */
+	public boolean addOrder(OrderEntity orderEntity) {
+		if (orders == null) {
+			orders = new ArrayList<>();
+		}
+		return orders.add(orderEntity);
+	}
+
+	/**
+	 * This is the method which remove order from transaction.
+	 * 
+	 * @param OrderEntity
+	 *            as order for transaction.
+	 */
+	public boolean removeOrder(OrderEntity orderEntity) {
+		if (orders == null) {
+			return false;
+		}
+		return orders.remove(orderEntity);
+	}
+
 	public static class TransactionEntityBuilder {
 		private Long version;
 		private Long id;
@@ -137,44 +172,105 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 		private CustomerEntity customerEntity;
 		private List<OrderEntity> orders;
 
+		/**
+		 * Default constructor for transaction entity builder.
+		 *
+		 */
 		public TransactionEntityBuilder() {
 		}
 
+		/**
+		 * This is the method which add version to transaction.
+		 * 
+		 * @param Long
+		 *            as version of transaction.
+		 * @return version of transaction.
+		 */
 		public TransactionEntityBuilder withVersion(Long version) {
 			this.version = version;
 			return this;
 		}
 
-		public TransactionEntityBuilder withAmount(Integer amount) {
-			this.amount = amount;
-			return this;
-		}
-
+		/**
+		 * This is the method which add id to transaction.
+		 * 
+		 * @param Long
+		 *            as id of transaction.
+		 * @return Id of transaction.
+		 */
 		public TransactionEntityBuilder withId(Long id) {
 			this.id = id;
 			return this;
 		}
 
+		/**
+		 * This is the method which add amount to transaction.
+		 * 
+		 * @param integer
+		 *            as amount of transaction.
+		 * @return Amount of transaction.
+		 */
+		public TransactionEntityBuilder withAmount(Integer amount) {
+			this.amount = amount;
+			return this;
+		}
+
+		/**
+		 * This is the method which add date to transaction.
+		 * 
+		 * @param Date
+		 *            as date of transaction.
+		 * @return Date of transaction.
+		 */
 		public TransactionEntityBuilder withDateTransaction(Date dateTransaction) {
 			this.dateTransaction = dateTransaction;
 			return this;
 		}
 
+		/**
+		 * This is the method which add status to transaction.
+		 * 
+		 * @param TransactionStatus
+		 *            as status of transaction.
+		 * @return Status of transaction.
+		 */
 		public TransactionEntityBuilder withTransactionStatus(TransactionStatus transactionStatus) {
 			this.transactionStatus = transactionStatus;
 			return this;
 		}
 
+		/**
+		 * This is the method which add customer to transaction.
+		 * 
+		 * @param CustomerEntity
+		 *            as customer.
+		 * @return Customer of transaction.
+		 */
 		public TransactionEntityBuilder withCustomerEntity(CustomerEntity customerEntity) {
 			this.customerEntity = customerEntity;
 			return this;
 		}
 
+		/**
+		 * This is the method which add orders to transaction.
+		 * 
+		 * @param List
+		 *            of orders.
+		 * @return Orders of transaction.
+		 */
 		public TransactionEntityBuilder withOrders(List<OrderEntity> orders) {
 			this.orders = orders;
 			return this;
 		}
 
+		/**
+		 * This is the method which build transaction entity and if there is no
+		 * demanded params throw exception.
+		 * 
+		 * @param Obligatory
+		 *            customer and list orders
+		 * @return Customer entity.
+		 */
 		public TransactionEntity build() {
 			if (customerEntity == null) {
 				throw new InvalidCreationException("Incorrect transaction to be created");
@@ -183,25 +279,6 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 			return new TransactionEntity(this);
 		}
 
-	}
-
-	public void removeCustomer() {
-		customerEntity.removeTransaction(this);
-		this.customerEntity = null;
-	}
-
-	public boolean addOrder(OrderEntity orderEntity) {
-		if (orders == null) {
-			orders = new ArrayList<>();
-		}
-		return orders.add(orderEntity);
-	}
-
-	public boolean removeOrder(OrderEntity orderEntity) {
-		if (orders == null) {
-			return false;
-		}
-		return orders.remove(orderEntity);
 	}
 
 }

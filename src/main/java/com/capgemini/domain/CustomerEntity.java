@@ -36,7 +36,6 @@ public class CustomerEntity extends AbstractEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Version
 	public Long version;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -148,6 +147,32 @@ public class CustomerEntity extends AbstractEntity implements Serializable {
 		this.transactions = transactions;
 	}
 
+	/**
+	 * This is the method which add transaction to customer.
+	 * 
+	 * @param TransactionEntity
+	 *            as transaction.
+	 */
+	public boolean addTransaction(TransactionEntity transaction) {
+		if (transactions == null) {
+			transactions = new ArrayList<>();
+		}
+		return transactions.add(transaction);
+	}
+
+	/**
+	 * This is the method which remove transaction from customer.
+	 * 
+	 * @param TransactionEntity
+	 *            as transaction.
+	 */
+	public boolean removeTransaction(TransactionEntity transaction) {
+		if (transactions != null) {
+			return transactions.remove(transaction);
+		}
+		return false;
+	}
+
 	public static CustomerEntityBuilder builder() {
 		return new CustomerEntityBuilder();
 	}
@@ -170,6 +195,13 @@ public class CustomerEntity extends AbstractEntity implements Serializable {
 		public CustomerEntityBuilder() {
 		}
 
+		/**
+		 * This is the method which add version to customer.
+		 * 
+		 * @param Long
+		 *            as version of customer.
+		 * @return Version of customer.
+		 */
 		public CustomerEntityBuilder withVersion(Long version) {
 			this.version = version;
 			return this;
@@ -259,6 +291,13 @@ public class CustomerEntity extends AbstractEntity implements Serializable {
 			return this;
 		}
 
+		/**
+		 * This is the method which add transactions to customer.
+		 * 
+		 * @param List
+		 *            of TransactionEntity as transactions.
+		 * @return Transactions of customer.
+		 */
 		public CustomerEntityBuilder withTransactions(List<TransactionEntity> transactions) {
 			this.transactions = transactions;
 			return this;
@@ -282,17 +321,4 @@ public class CustomerEntity extends AbstractEntity implements Serializable {
 
 	}
 
-	public boolean addTransaction(TransactionEntity transaction) {
-		if (transactions == null) {
-			transactions = new ArrayList<>();
-		}
-		return transactions.add(transaction);
-	}
-
-	public boolean removeTransaction(TransactionEntity transaction) {
-		if (transactions != null) {
-			return transactions.remove(transaction);
-		}
-		return false;
-	}
 }

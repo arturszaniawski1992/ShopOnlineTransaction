@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.capgemini.domain.OrderEntity;
+import com.capgemini.domain.OrderEntity.OrderEntityBuilder;
 import com.capgemini.exception.NoValidConnection;
 import com.capgemini.types.AdressDataTO;
 import com.capgemini.types.AdressDataTO.AdressDataTOBuilder;
@@ -142,6 +144,27 @@ public class OrderServiceTest {
 		// then
 		assertNotNull(orderService.findAllOrders());
 		assertEquals(2, orderService.findAllOrders().size());
+
+	}
+
+	@Test(expected = NoValidConnection.class)
+	public void shoudlReturnError() throws NoValidConnection {
+		// given
+
+		PurchasedProductTO product = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
+				.withPrice(125.0).withWeight(12.0).build();
+		PurchasedProductTO savedProduct = purchasedProductService.savePurchasedProduct(product);
+
+		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
+				.withStreet("Warszawska").build();
+
+		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("Szaniawski")
+				.withAdressData(adress).withMobile("4564564564").build();
+		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
+
+		OrderTO order1 = new OrderTOBuilder().withAmount(45).withProductTOId(savedProduct.getId()).build();
+		// when
+		OrderTO savedOrder1 = orderService.saveOrder(order1);
 
 	}
 

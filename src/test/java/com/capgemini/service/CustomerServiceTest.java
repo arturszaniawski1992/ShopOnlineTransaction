@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.capgemini.enums.TransactionStatus;
+import com.capgemini.exception.InvalidCreationException;
 import com.capgemini.exception.NoValidConnection;
 import com.capgemini.types.AdressDataTO;
 import com.capgemini.types.AdressDataTO.AdressDataTOBuilder;
@@ -67,6 +68,14 @@ public class CustomerServiceTest {
 		// then
 		assertThat(ver1).isNotEqualTo(ver2);
 		assertEquals(verTest, ver2);
+	}
+
+	@Test(expected = InvalidCreationException.class)
+	public void shouldThrowExceptionWhileCreatingCustomer() {
+
+		CustomerTO customer1 = new CustomerTOBuilder().withFirstName("Artur").build();
+		customerService.saveCustomer(customer1);
+
 	}
 
 	@Test
@@ -149,7 +158,7 @@ public class CustomerServiceTest {
 		CustomerTO addedCustomer2 = customerService.saveCustomer(cust1);
 		CustomerTO addedCustomer3 = customerService.saveCustomer(cust1);
 		// when
-		customerService.removeClient(addedCustomer1.getId());
+		customerService.removeCustomer(addedCustomer1.getId());
 		List<CustomerTO> customers = customerService.findAllCustomers();
 
 		// then

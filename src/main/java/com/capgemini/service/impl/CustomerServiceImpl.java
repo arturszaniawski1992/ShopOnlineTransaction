@@ -70,7 +70,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public void removeClient(Long id) {
+	public void removeCustomer(Long id) {
 		customerRepository.deleteById(id);
 
 	}
@@ -83,9 +83,9 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public List<CustomerTO> findTopThreeClientsWhoSpentTheMostInPeriod(Date dateFrom, Date dateTo,
-			int amountOfClients) {
+			int amountOfCustomers) {
 		List<CustomerEntity> allCustomers = customerRepository.findTopThreeClientsWhoSpentTheMostInPeriod(dateFrom,
-				dateTo, amountOfClients);
+				dateTo, amountOfCustomers);
 		return customerMapper.map2TOs(allCustomers);
 	}
 
