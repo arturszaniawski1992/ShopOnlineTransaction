@@ -108,7 +108,7 @@ public class TransactionServiceTest {
 		assertThat(savedTransaction.getId()).isEqualTo(selectedTransaction.getId());
 	}
 
-	@Test(expected = TransactionNotAllowedException.class)
+	@Test(expected = NoValidConnection.class)
 	public void testTransactionNotAllowedExceptions() throws NoValidConnection {
 		PurchasedProductTO product1 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
 				.withPrice(125.0).withWeight(10.0).build();
@@ -486,6 +486,34 @@ public class TransactionServiceTest {
 
 	@Test(expected = TransactionNotAllowedException.class)
 	public void shoudlThrowTransactionNotAllowed() {
+
+	}
+
+	@Test
+	public void shouldRemoveTransaction() {
+		// given
+		PurchasedProductTO product = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
+				.withPrice(125.0).withWeight(12.0).build();
+		PurchasedProductTO savedProduct = purchasedProductService.savePurchasedProduct(product);
+		List<Long> products = new ArrayList<>();
+		products.add(savedProduct.getId());
+
+		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
+				.withStreet("Warszawska").build();
+
+		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("Szaniawski")
+				.withAdressData(adress).withMobile("4564564564").build();
+		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
+
+		TransactionTO transaction = new TransactionTOBuilder().withAmount(15).withCustomerId(savedCustomer.getId())
+				.withTransactionStatus(TransactionStatus.EXECUTED).build();
+		TransactionTO savedTransaction = transactionService.saveTransaction(transaction);
+
+		// when
+		transactionService.removeTransaction(savedTransaction.getId());
+
+		// then
+		assertNotNull(transactionService.findAllTranactions());
 
 	}
 

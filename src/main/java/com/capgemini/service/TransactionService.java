@@ -10,6 +10,16 @@ import com.capgemini.types.TransactionTO;
 
 public interface TransactionService {
 	/**
+	 * This is the method which remove transaction by id.
+	 * 
+	 * @param Long
+	 *            as id of transaction.
+	 * @return
+	 * 
+	 */
+	void removeTransaction(Long id);
+
+	/**
 	 * This is the method which find transaction by id.
 	 * 
 	 * @param Long

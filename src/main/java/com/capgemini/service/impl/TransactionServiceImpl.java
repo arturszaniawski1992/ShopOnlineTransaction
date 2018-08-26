@@ -149,4 +149,22 @@ public class TransactionServiceImpl implements TransactionService {
 		Double amount = transactionRepository.calculateTotalCostOfCustomerTransactions(customerId);
 		return amount;
 	}
+
+	@Override
+	public void removeTransaction(Long id) {
+		TransactionEntity transactionEntity = transactionRepository.getOne(id);
+
+		CustomerEntity customerEntity = transactionEntity.getCustomerEntity();
+		removeTransactionFromCustomer(transactionEntity, customerEntity);
+
+		transactionRepository.deleteById(id);
+	}
+
+	private void removeTransactionFromCustomer(TransactionEntity transactionEntity, CustomerEntity customerEntity) {
+		List<TransactionEntity> clientTransactions = customerEntity.getTransactions();
+		clientTransactions.remove(transactionEntity);
+		customerEntity.setTransactions(clientTransactions);
+		customerRepository.save(customerEntity);
+	}
+
 }

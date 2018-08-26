@@ -17,16 +17,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.capgemini.enums.TransactionStatus;
 import com.capgemini.exception.NoValidConnection;
+import com.capgemini.mappers.PurchasedProductMapper;
 import com.capgemini.types.AdressDataTO;
-import com.capgemini.types.CustomerTO;
-import com.capgemini.types.OrderTO;
-import com.capgemini.types.PurchasedProductTO;
-import com.capgemini.types.TransactionTO;
 import com.capgemini.types.AdressDataTO.AdressDataTOBuilder;
+import com.capgemini.types.CustomerTO;
 import com.capgemini.types.CustomerTO.CustomerTOBuilder;
+import com.capgemini.types.OrderTO;
 import com.capgemini.types.OrderTO.OrderTOBuilder;
+import com.capgemini.types.PurchasedProductTO;
 import com.capgemini.types.PurchasedProductTO.PurchasedProductTOBuilder;
 import com.capgemini.types.PurchasedProductTOWithNameAndAmount;
+import com.capgemini.types.TransactionTO;
 import com.capgemini.types.TransactionTO.TransactionTOBuilder;
 
 @RunWith(SpringRunner.class)
@@ -42,6 +43,8 @@ public class PurchasedProductServiceTest {
 	TransactionService transactionService;
 	@Autowired
 	OrderService orderService;
+	@Autowired
+	PurchasedProductMapper productMapper;
 
 	@Test
 	public void shouldFindProductById() {

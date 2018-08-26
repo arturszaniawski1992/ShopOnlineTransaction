@@ -4,6 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.concurrent.TimeUnit;
+
+import org.hibernate.criterion.Order;
+import org.hsqldb.rights.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +16,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.capgemini.domain.OrderEntity;
-import com.capgemini.domain.OrderEntity.OrderEntityBuilder;
 import com.capgemini.exception.NoValidConnection;
+import com.capgemini.mappers.OrderMapper;
 import com.capgemini.types.AdressDataTO;
 import com.capgemini.types.AdressDataTO.AdressDataTOBuilder;
 import com.capgemini.types.CustomerTO;
@@ -40,6 +44,9 @@ public class OrderServiceTest {
 
 	@Autowired
 	private TransactionService transactionService;
+
+	@Autowired
+	OrderMapper orderMapper;
 
 	@Test
 	public void shouldTesVersion() throws NoValidConnection {
@@ -168,4 +175,29 @@ public class OrderServiceTest {
 
 	}
 
+	@Test
+	public void canMapOrderEntityToOrderTO() throws NoValidConnection {
+		// given
+		PurchasedProductTO product = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
+				.withPrice(125.0).withWeight(12.0).build();
+		PurchasedProductTO savedProduct = purchasedProductService.savePurchasedProduct(product);
+
+		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
+				.withStreet("Warszawska").build();
+
+		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("Szaniawski")
+				.withAdressData(adress).withMobile("4564564564").build();
+		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
+		TransactionTO transaction = new TransactionTOBuilder().withCustomerId(savedCustomer.getId()).build();
+		TransactionTO savedTransaction = transactionService.saveTransaction(transaction);
+		OrderTO order1 = new OrderTOBuilder().withAmount(45).withProductTOId(savedProduct.getId())
+				.withTransactionTO(savedTransaction.getId()).build();
+		OrderTO savedOrder = orderService.saveOrder(order1);
+
+		// when
+		OrderEntity mappedOrder = orderMapper.toOrderEntity(order1);
+		// then
+		assertEquals(mappedOrder.getAmount(), savedOrder.getAmount());
+
+	}
 }
