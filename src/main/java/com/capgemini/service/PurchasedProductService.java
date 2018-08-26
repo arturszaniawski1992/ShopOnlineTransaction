@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.capgemini.enums.TransactionStatus;
 import com.capgemini.types.PurchasedProductTO;
+import com.capgemini.types.PurchasedProductTOWithNameAndAmount;
 
 public interface PurchasedProductService {
 
@@ -19,7 +20,7 @@ public interface PurchasedProductService {
 
 	public Long countProducts();
 
-	public List<PurchasedProductTO> findListProductsWithTransactionInProgress(TransactionStatus transactionStatus);
+	public List<PurchasedProductTOWithNameAndAmount> findListProductsWithTransactionInProgress();
 
 	public List<PurchasedProductTO> getBestSellingProducts(int amount);
 

@@ -1,5 +1,6 @@
 package com.capgemini.service;
 
+import java.sql.Date;
 import java.util.List;
 
 import com.capgemini.types.CustomerTO;
@@ -19,6 +20,6 @@ public interface CustomerService {
 
 	public CustomerTO assignTransaction(CustomerTO customerTO, TransactionTO transactionTO);
 
-	public List<CustomerTO> findTopThreeClientsWhoSpentTheMostInPeriod(short mounthFrom, short yearFrom, short mounthTo,
-			short yearTo, int amountOfClients);
+	List<CustomerTO> findTopThreeClientsWhoSpentTheMostInPeriod(Date dateFrom, Date dateTo, int amountOfClients);
+
 }

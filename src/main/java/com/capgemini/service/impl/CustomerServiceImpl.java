@@ -1,5 +1,6 @@
 package com.capgemini.service.impl;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.OptimisticLockException;
@@ -81,10 +82,10 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public List<CustomerTO> findTopThreeClientsWhoSpentTheMostInPeriod(short mounthFrom, short yearFrom, short mounthTo,
-			short yearTo, int amountOfClients) {
-		List<CustomerEntity> allCustomers = customerRepository.findTopThreeClientsWhoSpentTheMostInPeriod(mounthFrom,
-				yearFrom, mounthTo, yearTo, amountOfClients);
+	public List<CustomerTO> findTopThreeClientsWhoSpentTheMostInPeriod(Date dateFrom, Date dateTo,
+			int amountOfClients) {
+		List<CustomerEntity> allCustomers = customerRepository.findTopThreeClientsWhoSpentTheMostInPeriod(dateFrom,
+				dateTo, amountOfClients);
 		return customerMapper.map2TOs(allCustomers);
 	}
 

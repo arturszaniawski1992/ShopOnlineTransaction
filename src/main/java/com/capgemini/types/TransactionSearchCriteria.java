@@ -8,26 +8,14 @@ public class TransactionSearchCriteria {
 	private Date dateFrom;
 	private Date dateTo;
 	private String productName;
-	private Double totalTransactionAmountFrom;
-	private Double totalTransactionAmountTo;
+	private Double totalTransactionAmount;
 
-	public TransactionSearchCriteria(String customerName, Date dateFrom, Date dateTo, String productName,
-			Double totalTransactionAmountFrom, Double totalTransactionAmountTo) {
-		super();
-		this.customerName = customerName;
-		this.dateFrom = dateFrom;
-		this.dateTo = dateTo;
-		this.productName = productName;
-		this.totalTransactionAmountFrom = totalTransactionAmountFrom;
-		this.totalTransactionAmountTo = totalTransactionAmountTo;
-	}
-
-	public String getName() {
+	public String getCustomerName() {
 		return customerName;
 	}
 
-	public void setName(String name) {
-		this.customerName = name;
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
 	}
 
 	public Date getDateFrom() {
@@ -54,20 +42,12 @@ public class TransactionSearchCriteria {
 		this.productName = productName;
 	}
 
-	public Double getTotalTransactionAmountFrom() {
-		return totalTransactionAmountFrom;
+	public Double getTotalTransactionAmount() {
+		return totalTransactionAmount;
 	}
 
-	public void setTotalTransactionAmountFrom(Double totalTransactionAmountFrom) {
-		this.totalTransactionAmountFrom = totalTransactionAmountFrom;
-	}
-
-	public Double getTotalTransactionAmountTo() {
-		return totalTransactionAmountTo;
-	}
-
-	public void setTotalTransactionAmountTo(Double totalTransactionAmountTo) {
-		this.totalTransactionAmountTo = totalTransactionAmountTo;
+	public void setTotalTransactionAmount(Double totalTransactionAmount) {
+		this.totalTransactionAmount = totalTransactionAmount;
 	}
 
 }

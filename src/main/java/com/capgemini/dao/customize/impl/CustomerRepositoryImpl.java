@@ -1,7 +1,6 @@
 package com.capgemini.dao.customize.impl;
 
-import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjusters;
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -31,13 +30,8 @@ public class CustomerRepositoryImpl implements CustomizedCustomerRepository {
 	}
 
 	@Override
-	public List<CustomerEntity> findTopThreeClientsWhoSpentTheMostInPeriod(short mounthFrom, short yearFrom,
-			short mounthTo, short yearTo, int amountOfClients) {
-
-		LocalDateTime from = LocalDateTime.of(yearFrom, mounthFrom, 1, 0, 0, 0);
-		LocalDateTime tempDate = LocalDateTime.of(yearTo, mounthTo, 15, 0, 0, 0);
-		LocalDateTime to = tempDate.with(TemporalAdjusters.lastDayOfMonth());
-
+	public List<CustomerEntity> findTopThreeClientsWhoSpentTheMostInPeriod(Date dateFrom, Date dateTo,
+			int amountOfClients) {
 		QTransactionEntity transactionEntity = QTransactionEntity.transactionEntity;
 		QPurchasedProductEntity purchasedProductEntity = QPurchasedProductEntity.purchasedProductEntity;
 		QCustomerEntity customerEntity = QCustomerEntity.customerEntity;
@@ -48,7 +42,7 @@ public class CustomerRepositoryImpl implements CustomizedCustomerRepository {
 				.innerJoin(customerEntity.transactions, transactionEntity)
 				.innerJoin(transactionEntity.orders, orderEntity)
 				.innerJoin(orderEntity.productEntity, purchasedProductEntity).select(customerEntity)
-				.groupBy(customerEntity).where(transactionEntity.dateTransaction.between(from, to))
+				.groupBy(customerEntity).where(transactionEntity.dateTransaction.between(dateFrom, dateTo))
 				.orderBy((purchasedProductEntity.price.multiply(orderEntity.amount)).sum().desc())
 				.limit(amountOfClients).fetch();
 		return topThreeClients;

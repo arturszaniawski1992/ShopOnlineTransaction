@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import com.capgemini.dao.CustomerRepository;
 import com.capgemini.dao.PurchasedProductRepository;
 import com.capgemini.domain.PurchasedProductEntity;
-import com.capgemini.enums.TransactionStatus;
 import com.capgemini.mappers.PurchasedProductMapper;
 import com.capgemini.service.PurchasedProductService;
 import com.capgemini.types.PurchasedProductTO;
+import com.capgemini.types.PurchasedProductTOWithNameAndAmount;
 
 @Service
 @Transactional
@@ -74,10 +74,8 @@ public class PurchasedProductServiceImpl implements PurchasedProductService {
 	}
 
 	@Override
-	public List<PurchasedProductTO> findListProductsWithTransactionInProgress(TransactionStatus transactionStatus) {
-		return purchasedProductMapper
-				.map2TOs((purchasedProductRepository.findListProductsWithTransactionInProgress(transactionStatus)));
-
+	public List<PurchasedProductTOWithNameAndAmount> findListProductsWithTransactionInProgress() {
+		return purchasedProductRepository.findListProductsWithTransactionInProgress();
 	}
 
 	@Override

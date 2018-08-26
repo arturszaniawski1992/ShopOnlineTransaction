@@ -1,6 +1,7 @@
 package com.capgemini.types;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import com.capgemini.enums.TransactionStatus;
@@ -9,7 +10,7 @@ import com.capgemini.exception.InvalidCreationException;
 public class TransactionTO {
 	private Long version;
 	private Long id;
-	LocalDateTime dateTransaction;
+	private Date dateTransaction;
 	private TransactionStatus transactionStatus;
 	private Integer amount;
 	private Long customerId;
@@ -44,11 +45,11 @@ public class TransactionTO {
 		this.id = id;
 	}
 
-	public LocalDateTime getDateTransaction() {
+	public Date getDateTransaction() {
 		return dateTransaction;
 	}
 
-	public void setDateTransaction(LocalDateTime dateTransaction) {
+	public void setDateTransaction(Date dateTransaction) {
 		this.dateTransaction = dateTransaction;
 	}
 
@@ -87,7 +88,7 @@ public class TransactionTO {
 	public static class TransactionTOBuilder {
 		private Long version;
 		private Long id;
-		LocalDateTime dateTransaction;
+		private Date dateTransaction;
 		private TransactionStatus transactionStatus;
 		private Integer amount;
 		private Long customerId;
@@ -106,7 +107,7 @@ public class TransactionTO {
 			return this;
 		}
 
-		public TransactionTOBuilder withDateTransaction(LocalDateTime dateTransaction) {
+		public TransactionTOBuilder withDateTransaction(Date dateTransaction) {
 			this.dateTransaction = dateTransaction;
 			return this;
 		}

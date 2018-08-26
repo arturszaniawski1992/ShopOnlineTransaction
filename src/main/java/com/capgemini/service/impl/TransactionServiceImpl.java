@@ -1,5 +1,6 @@
 package com.capgemini.service.impl;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -128,8 +129,8 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public Double getTotalAmountOfTransactionsWithStatus(Long customerId, TransactionStatus status) {
-		return transactionRepository.getTotalAmountOfTransactionsWithStatus(customerId, status);
-
+		Double amount = transactionRepository.getTotalAmountOfTransactionsWithStatus(customerId, status);
+		return amount;
 	}
 
 	@Override
@@ -138,7 +139,14 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public double calculateProfitFromPeriod(short mounthFrom, short yearFrom, short mounthTo, short yearTo) {
-		return transactionRepository.calculateProfitFromPeriod(mounthFrom, yearFrom, mounthTo, yearTo);
+	public Double calculateProfitFromPeriod(Date dateFrom, Date dateTo) {
+		Double profit = transactionRepository.calculateProfitFromPeriod(dateFrom, dateTo);
+		return profit;
+	}
+
+	@Override
+	public Double calculateTotalCostOfCustomerTransactions(Long customerId) {
+		Double amount = transactionRepository.calculateTotalCostOfCustomerTransactions(customerId);
+		return amount;
 	}
 }

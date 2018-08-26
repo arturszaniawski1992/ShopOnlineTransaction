@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +27,7 @@ import com.capgemini.domain.TransactionEntity.TransactionEntityBuilder;
 import com.capgemini.embeded.AdressData;
 import com.capgemini.embeded.AdressData.AdressDataEntityBuilder;
 import com.capgemini.enums.TransactionStatus;
+import com.capgemini.types.PurchasedProductTOWithNameAndAmount;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = "spring.profiles.active=mysql")
@@ -146,8 +146,8 @@ public class PurchasedProductRepositoryTest {
 		orders.forEach(order -> order.setTransactionEntity(saved4));
 
 		// when
-		List<PurchasedProductEntity> productsInProgress = purchasedProductRepository
-				.findListProductsWithTransactionInProgress(TransactionStatus.IN_PROGRESS);
+		List<PurchasedProductTOWithNameAndAmount> productsInProgress = purchasedProductRepository
+				.findListProductsWithTransactionInProgress();
 
 		// then
 		assertEquals(0, productsInProgress.size());

@@ -4,9 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -248,9 +246,13 @@ public class CustomerRepositioryTest {
 				.withOrders(orders).withTransactionStatus(TransactionStatus.IN_PROGRESS).build();
 		TransactionEntity transactionEntity4 = new TransactionEntityBuilder().withCustomerEntity(customer1)
 				.withOrders(orders).withTransactionStatus(TransactionStatus.IN_PROGRESS).build();
+
 		// when
-		List<CustomerEntity> customers = customerRepository.findTopThreeClientsWhoSpentTheMostInPeriod((short) 2,
-				(short) 2018, (short) 4, (short) 2018, 3);
+		/*
+		 * List<CustomerEntity> customers =
+		 * customerRepository.findTopThreeClientsWhoSpentTheMostInPeriod(
+		 * dateFrom, dateTo, amountOfClients);
+		 */
 
 		// then
 

@@ -1,8 +1,7 @@
 package com.capgemini.dao.customize.impl;
 
-import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import com.capgemini.dao.customize.CustomizedTransactionRepository;
 import com.capgemini.domain.CustomerEntity;
+import com.capgemini.domain.QCustomerEntity;
 import com.capgemini.domain.QOrderEntity;
 import com.capgemini.domain.QPurchasedProductEntity;
 import com.capgemini.domain.QTransactionEntity;
@@ -62,8 +62,8 @@ public class TransactionRepositoryImpl implements CustomizedTransactionRepositor
 
 		List<Predicate> predicates = new ArrayList<>();
 
-		if (searchCriteria.getName() != null) {
-			predicates.add(cb.equal(transactionEntity.get("customerEntity.lastName"), searchCriteria.getName()));
+		if (searchCriteria.getCustomerName() != null) {
+			predicates.add(cb.equal(transactionEntity.get("customerEntity"), searchCriteria.getCustomerName()));
 		}
 
 		if (searchCriteria.getDateFrom() != null) {
@@ -78,12 +78,8 @@ public class TransactionRepositoryImpl implements CustomizedTransactionRepositor
 			predicates.add(cb.equal(transactionEntity.get("productName"), searchCriteria.getProductName()));
 		}
 
-		if (searchCriteria.getTotalTransactionAmountFrom() != null) {
-			predicates.add(cb.equal(transactionEntity.get("amount"), searchCriteria.getTotalTransactionAmountFrom()));
-		}
-
-		if (searchCriteria.getTotalTransactionAmountTo() != null) {
-			predicates.add(cb.equal(transactionEntity.get("amount"), searchCriteria.getTotalTransactionAmountTo()));
+		if (searchCriteria.getTotalTransactionAmount() != null) {
+			predicates.add(cb.equal(transactionEntity.get("amount"), searchCriteria.getTotalTransactionAmount()));
 		}
 
 		query.select(transactionEntity).where(predicates.toArray(new Predicate[] {}));
@@ -93,24 +89,39 @@ public class TransactionRepositoryImpl implements CustomizedTransactionRepositor
 
 	// 2g
 	@Override
-	public double calculateProfitFromPeriod(short mounthFrom, short yearFrom, short mounthTo, short yearTo) {
-		LocalDateTime from = LocalDateTime.of(yearFrom, mounthFrom, 1, 0, 0, 0);
-		LocalDateTime tempDate = LocalDateTime.of(yearTo, mounthTo, 15, 0, 0, 0);
-		LocalDateTime to = tempDate.with(TemporalAdjusters.lastDayOfMonth());
+	public Double calculateProfitFromPeriod(Date dateFrom, Date dateTo) {
 
 		QTransactionEntity transactionEntity = QTransactionEntity.transactionEntity;
 		QPurchasedProductEntity purchasedProductEntity = QPurchasedProductEntity.purchasedProductEntity;
 		QOrderEntity orderEntity = QOrderEntity.orderEntity;
 
 		JPAQueryFactory query = new JPAQueryFactory(entityManager);
-		Double profit = query.from(transactionEntity).innerJoin(transactionEntity.orders, orderEntity)
+		Double result = query.from(transactionEntity).innerJoin(transactionEntity.orders, orderEntity)
 				.innerJoin(orderEntity.productEntity, purchasedProductEntity)
-				.where(transactionEntity.dateTransaction.between(from, to)
+				.where(transactionEntity.dateTransaction.between(dateFrom, dateTo)
 						.and(transactionEntity.transactionStatus.eq(TransactionStatus.FINISHED)))
 				.select((orderEntity.amount.doubleValue().multiply(purchasedProductEntity.price)
 						.multiply((purchasedProductEntity.margin).divide(100))).sum())
 				.fetchOne();
-		return profit;
+		return result;
+	}
+
+	// 2b
+	@Override
+	public Double calculateTotalCostOfCustomerTransactions(Long customerId) {
+		JPAQuery<Double> query = new JPAQuery(entityManager);
+		QTransactionEntity transactionEntity = QTransactionEntity.transactionEntity;
+		QPurchasedProductEntity purchasedProductEntity = QPurchasedProductEntity.purchasedProductEntity;
+		QCustomerEntity customerEntity = QCustomerEntity.customerEntity;
+		QOrderEntity orderEntity = QOrderEntity.orderEntity;
+
+		Double result = query.from(transactionEntity)
+				.select((orderEntity.amount.multiply(purchasedProductEntity.price).doubleValue()).sum().doubleValue())
+				.join(transactionEntity.customerEntity, customerEntity).join(transactionEntity.orders, orderEntity)
+				.join(orderEntity.productEntity, purchasedProductEntity).where(customerEntity.id.eq(customerId))
+				.fetchOne();
+
+		return result;
 	}
 
 }

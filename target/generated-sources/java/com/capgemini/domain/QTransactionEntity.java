@@ -31,7 +31,7 @@ public class QTransactionEntity extends EntityPathBase<TransactionEntity> {
 
     public final QCustomerEntity customerEntity;
 
-    public final DateTimePath<java.time.LocalDateTime> dateTransaction = createDateTime("dateTransaction", java.time.LocalDateTime.class);
+    public final DateTimePath<java.util.Date> dateTransaction = createDateTime("dateTransaction", java.util.Date.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 

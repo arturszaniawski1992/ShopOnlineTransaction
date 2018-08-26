@@ -1,5 +1,6 @@
 package com.capgemini.dao.customize.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,8 +14,9 @@ import com.capgemini.domain.QOrderEntity;
 import com.capgemini.domain.QPurchasedProductEntity;
 import com.capgemini.domain.QTransactionEntity;
 import com.capgemini.enums.TransactionStatus;
+import com.capgemini.types.PurchasedProductTOWithNameAndAmount;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Repository
 public class PurchasedProductRepositoryImpl implements CustomizedPurchasedProductRepository {
@@ -22,21 +24,31 @@ public class PurchasedProductRepositoryImpl implements CustomizedPurchasedProduc
 	@Autowired
 	EntityManager entityManager;
 
+	// 2f
 	@Override
-	public List<PurchasedProductEntity> findListProductsWithTransactionInProgress(TransactionStatus transactionStatus) {
+	public List<PurchasedProductTOWithNameAndAmount> findListProductsWithTransactionInProgress() {
+		JPAQuery<PurchasedProductEntity> query = new JPAQuery(entityManager);
+		QPurchasedProductEntity purchasedProductEntity = QPurchasedProductEntity.purchasedProductEntity;
 		QTransactionEntity transactionEntity = QTransactionEntity.transactionEntity;
 		QOrderEntity orderEntity = QOrderEntity.orderEntity;
-		QPurchasedProductEntity purchasedProductEntity = QPurchasedProductEntity.purchasedProductEntity;// produkt
-		JPAQueryFactory query = new JPAQueryFactory(entityManager);
 
-		List<PurchasedProductEntity> productsWithStatusInProgress = query.from(transactionEntity)
-				.innerJoin(transactionEntity.orders, orderEntity)
-				.innerJoin(orderEntity.productEntity, purchasedProductEntity).select(purchasedProductEntity)
-				.where(transactionEntity.transactionStatus.eq(TransactionStatus.IN_PROGRESS)).fetch();
+		List<Tuple> results = query.from(purchasedProductEntity).join(purchasedProductEntity.orders, orderEntity)
+				.join(orderEntity.transactionEntity, transactionEntity)
+				.select(purchasedProductEntity.productName, orderEntity.amount.sum())
+				.where(transactionEntity.transactionStatus.eq(TransactionStatus.IN_PROGRESS))
+				.groupBy(purchasedProductEntity.productName).orderBy(orderEntity.amount.sum().desc()).fetch();
 
-		return productsWithStatusInProgress;
+		List<PurchasedProductTOWithNameAndAmount> products = new ArrayList<>();
+		for (Tuple tuple : results) {
+			products.add(new PurchasedProductTOWithNameAndAmount(tuple.get(purchasedProductEntity.productName),
+					tuple.get(orderEntity.amount.sum())));
+
+		}
+
+		return products;
 	}
 
+	// 2d
 	@Override
 	public List<PurchasedProductEntity> getBestSellingProducts(int amount) {
 		QPurchasedProductEntity purchasedProductEntity = QPurchasedProductEntity.purchasedProductEntity;

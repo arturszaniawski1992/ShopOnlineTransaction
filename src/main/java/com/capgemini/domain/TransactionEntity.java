@@ -3,6 +3,7 @@ package com.capgemini.domain;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.jdo.annotations.Column;
@@ -14,13 +15,13 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.capgemini.enums.TransactionStatus;
 import com.capgemini.exception.InvalidCreationException;
@@ -29,6 +30,7 @@ import com.capgemini.listeners.UpdateListener;
 
 @Entity
 @Table(name = "transactions")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @EntityListeners({ UpdateListener.class, InsertListener.class })
 public class TransactionEntity extends AbstractEntity implements Serializable {
 
@@ -42,8 +44,8 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@DateTimeFormat
-	LocalDateTime dateTransaction;
+	@Column
+	private Date dateTransaction;
 	@Enumerated(EnumType.STRING)
 	private TransactionStatus transactionStatus;
 	@Column
@@ -84,7 +86,7 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 		this.id = id;
 	}
 
-	public LocalDateTime getDateTransaction() {
+	public Date getDateTransaction() {
 		return dateTransaction;
 	}
 
@@ -100,7 +102,7 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 		return transactionStatus;
 	}
 
-	public void setDateTransaction(LocalDateTime dateTransaction) {
+	public void setDateTransaction(Date dateTransaction) {
 		this.dateTransaction = dateTransaction;
 
 	}
@@ -130,7 +132,7 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 		private Long version;
 		private Long id;
 		private Integer amount;
-		LocalDateTime dateTransaction;
+		private Date dateTransaction;
 		private TransactionStatus transactionStatus;
 		private CustomerEntity customerEntity;
 		private List<OrderEntity> orders;
@@ -153,7 +155,7 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 			return this;
 		}
 
-		public TransactionEntityBuilder withDateTransaction(LocalDateTime dateTransaction) {
+		public TransactionEntityBuilder withDateTransaction(Date dateTransaction) {
 			this.dateTransaction = dateTransaction;
 			return this;
 		}

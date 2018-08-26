@@ -1,5 +1,6 @@
 package com.capgemini.service;
 
+import java.sql.Date;
 import java.util.List;
 
 import com.capgemini.enums.TransactionStatus;
@@ -23,6 +24,8 @@ public interface TransactionService {
 
 	public List<TransactionTO> searchForTransactionsBySearchCriteria(TransactionSearchCriteria searchCriteria);
 
-	public double calculateProfitFromPeriod(short mounthFrom, short yearFrom, short mounthTo, short yearTo);
+	public Double calculateProfitFromPeriod(Date dateFrom, Date dateT);
+
+	public Double calculateTotalCostOfCustomerTransactions(Long customerId);
 
 }
