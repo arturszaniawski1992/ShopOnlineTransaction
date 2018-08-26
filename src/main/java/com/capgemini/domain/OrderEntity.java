@@ -173,7 +173,7 @@ public class OrderEntity extends AbstractEntity implements Serializable {
 		 * 
 		 * @param Obligatory
 		 *            String amount.
-		 * @return Customer entity.
+		 * @return Order entity.
 		 */
 		public OrderEntity build() {
 			if (amount == null) {

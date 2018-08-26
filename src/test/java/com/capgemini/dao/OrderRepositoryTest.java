@@ -27,6 +27,7 @@ import com.capgemini.domain.TransactionEntity.TransactionEntityBuilder;
 import com.capgemini.embeded.AdressData;
 import com.capgemini.embeded.AdressData.AdressDataEntityBuilder;
 import com.capgemini.enums.TransactionStatus;
+import com.capgemini.exception.InvalidCreationException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = "spring.profiles.active=hsql")
@@ -136,5 +137,10 @@ public class OrderRepositoryTest {
 		assertEquals(2, orderRepository.findAll().size());
 		assertEquals(3, orders.size());
 
+	}
+
+	@Test(expected = InvalidCreationException.class)
+	public void shouldThrowInvalidCreationExcception() {
+		OrderEntity order1 = new OrderEntityBuilder().build();
 	}
 }

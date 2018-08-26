@@ -67,11 +67,11 @@ public class TransactionRepositoryImpl implements CustomizedTransactionRepositor
 		}
 
 		if (searchCriteria.getDateFrom() != null) {
-			predicates.add(cb.equal(transactionEntity.get("dateFrom"), searchCriteria.getDateFrom()));
+			predicates.add(cb.equal(transactionEntity.get("dateTransaction"), searchCriteria.getDateFrom()));
 		}
 
 		if (searchCriteria.getDateTo() != null) {
-			predicates.add(cb.equal(transactionEntity.get("dateTo"), searchCriteria.getDateTo()));
+			predicates.add(cb.equal(transactionEntity.get("dateTransaction"), searchCriteria.getDateTo()));
 		}
 
 		if (searchCriteria.getProductName() != null) {

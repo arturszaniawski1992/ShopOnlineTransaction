@@ -2,10 +2,8 @@ package com.capgemini.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -19,8 +17,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.capgemini.domain.CustomerEntity;
 import com.capgemini.domain.CustomerEntity.CustomerEntityBuilder;
-import com.capgemini.domain.OrderEntity;
-import com.capgemini.domain.OrderEntity.OrderEntityBuilder;
 import com.capgemini.domain.PurchasedProductEntity;
 import com.capgemini.domain.PurchasedProductEntity.PurchasedProductEntityBuilder;
 import com.capgemini.domain.TransactionEntity;
@@ -28,6 +24,7 @@ import com.capgemini.domain.TransactionEntity.TransactionEntityBuilder;
 import com.capgemini.embeded.AdressData;
 import com.capgemini.embeded.AdressData.AdressDataEntityBuilder;
 import com.capgemini.enums.TransactionStatus;
+import com.capgemini.exception.InvalidCreationException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = "spring.profiles.active=mysql")
@@ -42,8 +39,6 @@ public class TransactionRepositoryTest {
 	private CustomerRepository customerRepository;
 	@Autowired
 	private PurchasedProductRepository purchasedProductRepository;
-	@Autowired
-	private OrderRepository orderRepository;
 
 	@Test
 	public void shouldFindTransactionById() {
@@ -98,6 +93,12 @@ public class TransactionRepositoryTest {
 		// then
 		assertEquals(4, customerRepository.count());
 		assertEquals(8, selectedTransaction.size());
+	}
+
+	@Test(expected = InvalidCreationException.class)
+	public void shouldThrowInvalidCreationExcception() {
+		TransactionEntity transactionEntity = new TransactionEntityBuilder()
+				.withTransactionStatus(TransactionStatus.IN_PROGRESS).build();
 	}
 
 }

@@ -1,7 +1,6 @@
 package com.capgemini.domain;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +41,7 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 	public Long version;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@Column
 	private Date dateTransaction;
@@ -268,8 +267,8 @@ public class TransactionEntity extends AbstractEntity implements Serializable {
 		 * demanded params throw exception.
 		 * 
 		 * @param Obligatory
-		 *            customer and list orders
-		 * @return Customer entity.
+		 *            customer.
+		 * @return Transaction entity.
 		 */
 		public TransactionEntity build() {
 			if (customerEntity == null) {

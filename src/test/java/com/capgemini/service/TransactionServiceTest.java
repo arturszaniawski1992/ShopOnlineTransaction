@@ -3,6 +3,7 @@ package com.capgemini.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -15,11 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.capgemini.domain.PurchasedProductEntity;
-import com.capgemini.domain.TransactionEntity;
 import com.capgemini.enums.TransactionStatus;
+import com.capgemini.exception.InvalidCreationException;
 import com.capgemini.exception.NoValidConnection;
-import com.capgemini.exception.TransactionNotAllowedException;
 import com.capgemini.types.AdressDataTO;
 import com.capgemini.types.AdressDataTO.AdressDataTOBuilder;
 import com.capgemini.types.CustomerTO;
@@ -108,8 +107,8 @@ public class TransactionServiceTest {
 		assertThat(savedTransaction.getId()).isEqualTo(selectedTransaction.getId());
 	}
 
-	@Test(expected = NoValidConnection.class)
-	public void testTransactionNotAllowedExceptions() throws NoValidConnection {
+	@Test(expected = InvalidCreationException.class)
+	public void shouldThrowExcpetion() throws NoValidConnection {
 		PurchasedProductTO product1 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
 				.withPrice(125.0).withWeight(10.0).build();
 		PurchasedProductTO product2 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
@@ -126,7 +125,7 @@ public class TransactionServiceTest {
 				.withAdressData(adress).withMobile("4564564564").build();
 		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
 
-		TransactionTO transaction = new TransactionTOBuilder().withAmount(15).withCustomerId(savedCustomer.getId())
+		TransactionTO transaction = new TransactionTOBuilder().withAmount(15)
 				.withTransactionStatus(TransactionStatus.EXECUTED).build();
 		TransactionTO savedTransaction = transactionService.saveTransaction(transaction);
 
@@ -236,14 +235,14 @@ public class TransactionServiceTest {
 		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("Szaniawski")
 				.withAdressData(adress).withMobile("4564564564").build();
 		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
-
-		TransactionTO transaction = new TransactionTOBuilder().withAmount(15).withCustomerId(savedCustomer.getId())
-				.withTransactionStatus(TransactionStatus.EXECUTED).build();
+		Date dateTransaction = java.sql.Date.valueOf("2017-11-15");
+		TransactionTO transaction = new TransactionTOBuilder().withAmount(15).withDateTransaction(dateTransaction)
+				.withCustomerId(savedCustomer.getId()).withTransactionStatus(TransactionStatus.EXECUTED).build();
 		TransactionTO savedTransaction = transactionService.saveTransaction(transaction);
 
 		// when
 		TransactionSearchCriteria searchCriteria = new TransactionSearchCriteria();
-		searchCriteria.setCustomerName(savedCustomer.getLastName());
+		searchCriteria.setDateFrom(java.sql.Date.valueOf("2017-11-15"));
 		List<TransactionTO> resultList = transactionService.searchForTransactionsBySearchCriteria(searchCriteria);
 
 		// then
@@ -484,11 +483,6 @@ public class TransactionServiceTest {
 		assertEquals(30.0, result2, 0.001);
 	}
 
-	@Test(expected = TransactionNotAllowedException.class)
-	public void shoudlThrowTransactionNotAllowed() {
-
-	}
-
 	@Test
 	public void shouldRemoveTransaction() {
 		// given
@@ -514,6 +508,64 @@ public class TransactionServiceTest {
 
 		// then
 		assertNotNull(transactionService.findAllTranactions());
+
+	}
+
+	@Test
+	public void shouldRemovOrderWhenTransactionIsRemoved() throws NoValidConnection {
+		// given
+		PurchasedProductTO product = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
+				.withPrice(125.0).withWeight(12.0).build();
+		PurchasedProductTO savedProduct = purchasedProductService.savePurchasedProduct(product);
+		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
+				.withStreet("Warszawska").build();
+		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("Szaniawski")
+				.withAdressData(adress).withMobile("4564564564").build();
+		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
+
+		TransactionTO transaction = new TransactionTOBuilder().withAmount(15).withCustomerId(savedCustomer.getId())
+				.withTransactionStatus(TransactionStatus.EXECUTED).build();
+		TransactionTO savedTransaction = transactionService.saveTransaction(transaction);
+
+		OrderTO order1 = new OrderTOBuilder().withAmount(45).withProductTOId(savedProduct.getId())
+				.withTransactionTO(savedTransaction.getId()).build();
+		OrderTO savedOrder = orderService.saveOrder(order1);
+
+		// when
+		transactionService.removeTransaction(savedTransaction.getId());
+		// then
+		// assertNull(transactionService.findTransactionById(savedTransaction.getId()));
+		assertNull(orderService.findOrderById(order1.getId()));
+		// Assert.assertEquals((Integer)0,
+		// (Integer)productService.findById(savedProduct.getId()).getTransactions().size());
+
+	}
+
+	@Test
+	public void shouldRemoveOrderWhenRemovingProduct() throws NoValidConnection {
+		// given
+
+		PurchasedProductTO product = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
+				.withPrice(125.0).withWeight(12.0).build();
+		PurchasedProductTO savedProduct = purchasedProductService.savePurchasedProduct(product);
+		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
+				.withStreet("Warszawska").build();
+		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("Szaniawski")
+				.withAdressData(adress).withMobile("4564564564").build();
+		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
+
+		TransactionTO transaction = new TransactionTOBuilder().withAmount(15).withCustomerId(savedCustomer.getId())
+				.withTransactionStatus(TransactionStatus.EXECUTED).build();
+		TransactionTO savedTransaction = transactionService.saveTransaction(transaction);
+
+		OrderTO order1 = new OrderTOBuilder().withAmount(45).withProductTOId(savedProduct.getId())
+				.withTransactionTO(savedTransaction.getId()).build();
+		OrderTO savedOrder = orderService.saveOrder(order1);
+
+		// when
+		purchasedProductService.removeProduct(savedProduct.getId());
+		// then;
+		assertNull(purchasedProductService.findPurchasedProductById(savedProduct.getId()));
 
 	}
 

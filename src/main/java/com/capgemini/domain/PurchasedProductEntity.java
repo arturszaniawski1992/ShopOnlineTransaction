@@ -224,7 +224,7 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 		 * 
 		 * @param Double
 		 *            as weight of product.
-		 * @return weith of product.
+		 * @return weight of product.
 		 */
 		public PurchasedProductEntityBuilder withWeight(Double weight) {
 			this.weight = weight;
@@ -232,10 +232,10 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 		}
 
 		/**
-		 * This is the method which add transactions to product.
+		 * This is the method which add orders to product.
 		 * 
 		 * @param List
-		 *            of TransactionEntity as transactions.
+		 *            of orders.
 		 * @return Orders of product.
 		 */
 		public PurchasedProductEntityBuilder withOrders(List<OrderEntity> orders) {
@@ -249,7 +249,7 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 		 * 
 		 * @param Obligatory
 		 *            String price, String productName, Double weight.
-		 * @return Customer entity.
+		 * @return Product entity.
 		 */
 		public PurchasedProductEntity build() {
 			if (price == null || productName == null || weight == null) {

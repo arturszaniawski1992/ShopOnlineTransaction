@@ -94,44 +94,105 @@ public class TransactionTO {
 		private Long customerId;
 		private List<Long> orders;
 
+		/**
+		 * Default constructor for transaction TO builder.
+		 *
+		 */
 		public TransactionTOBuilder() {
 		}
 
+		/**
+		 * This is the method which add version to transaction.
+		 * 
+		 * @param Long
+		 *            as version of transaction.
+		 * @return version of transaction.
+		 */
 		public TransactionTOBuilder withVersion(Long version) {
 			this.version = version;
 			return this;
 		}
 
+		/**
+		 * This is the method which add id to transaction.
+		 * 
+		 * @param Long
+		 *            as id of transaction.
+		 * @return Id of transaction.
+		 */
 		public TransactionTOBuilder withId(Long id) {
 			this.id = id;
 			return this;
 		}
 
+		/**
+		 * This is the method which add date to transaction.
+		 * 
+		 * @param Date
+		 *            as date of transaction.
+		 * @return Date of transaction.
+		 */
 		public TransactionTOBuilder withDateTransaction(Date dateTransaction) {
 			this.dateTransaction = dateTransaction;
 			return this;
 		}
 
+		/**
+		 * This is the method which add status to transaction.
+		 * 
+		 * @param TransactionStatus
+		 *            as status of transaction.
+		 * @return Status of transaction.
+		 */
 		public TransactionTOBuilder withTransactionStatus(TransactionStatus transactionStatus) {
 			this.transactionStatus = transactionStatus;
 			return this;
 		}
 
+		/**
+		 * This is the method which add amount to transaction.
+		 * 
+		 * @param integer
+		 *            as amount of transaction.
+		 * @return Amount of transaction.
+		 */
 		public TransactionTOBuilder withAmount(Integer amount) {
 			this.amount = amount;
 			return this;
 		}
 
+		/**
+		 * This is the method which add customer to transaction.
+		 * 
+		 * @param Long
+		 *            as id of customer.
+		 * @return Customer of transaction.
+		 */
 		public TransactionTOBuilder withCustomerId(Long customerId) {
 			this.customerId = customerId;
 			return this;
 		}
 
+		/**
+		 * This is the method which add orders to transaction.
+		 * 
+		 * @param List
+		 *            of Long as orders.
+		 * @return Orders of transaction.
+		 */
 		public TransactionTOBuilder withOrders(List<Long> orders) {
 			this.orders = orders;
 			return this;
 		}
 
+		/**
+		 * This is the method which build transaction TO and if there is no
+		 * demanded params throw exception.
+		 * 
+		 * @param Obligatory
+		 *            customer id.
+		 * @return Transaction TO.
+		 */
 		public TransactionTO build() {
 			if (customerId == null) {
 				throw new InvalidCreationException("Incorrect transaction to be created");

@@ -27,6 +27,7 @@ import com.capgemini.domain.TransactionEntity.TransactionEntityBuilder;
 import com.capgemini.embeded.AdressData;
 import com.capgemini.embeded.AdressData.AdressDataEntityBuilder;
 import com.capgemini.enums.TransactionStatus;
+import com.capgemini.exception.InvalidCreationException;
 import com.capgemini.types.PurchasedProductTOWithNameAndAmount;
 
 @RunWith(SpringRunner.class)
@@ -116,7 +117,7 @@ public class PurchasedProductRepositoryTest {
 		OrderEntity savedOrder1 = orderRepository.save(order1);
 		OrderEntity savedOrder2 = orderRepository.save(order2);
 		OrderEntity savedOrder3 = orderRepository.save(order3);
-		OrderEntity savedOrder4 = orderRepository.save(order3);
+		OrderEntity savedOrder4 = orderRepository.save(order4);
 
 		List<OrderEntity> orders = new ArrayList<>();
 		orders.add(savedOrder1);
@@ -260,17 +261,6 @@ public class PurchasedProductRepositoryTest {
 		TransactionEntity found = transactionRepository.findById(saved.getId());
 		List<OrderEntity> list = found.getOrders();
 
-		final int PRO1_QUANTITY = 5;
-		final int PRO2_QUANTITY = 3;
-		final int PRO3_QUANTITY = 8;
-		final int PRO4_QUANTITY = 1;
-		final int PRO5_QUANTITY = 2;
-		final int PRO6_QUANTITY = 9;
-		final int PRO7_QUANTITY = 7;
-		final int PRO8_QUANTITY = 4;
-		final int PRO9_QUANTITY = 6;
-		final int PRO10_QUANTITY = 10;
-
 		final int RESULT_LIST_SIZE = 5;
 
 		// when
@@ -281,6 +271,11 @@ public class PurchasedProductRepositoryTest {
 
 		assertEquals((Integer) RESULT_LIST_SIZE, (Integer) resultList.size());
 
+	}
+
+	@Test(expected = InvalidCreationException.class)
+	public void shouldThrowInvalidCreationExcception() {
+		PurchasedProductEntity product = new PurchasedProductEntityBuilder().withMargin(12.0).build();
 	}
 
 }
