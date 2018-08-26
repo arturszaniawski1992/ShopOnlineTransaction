@@ -20,6 +20,14 @@ public class OrderMapper {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	/**
+	 * This is the method which map order entity to order TO.
+	 * 
+	 * @param OrderEntity
+	 *            as order.
+	 * 
+	 * @return OrderTO as order.
+	 */
 	public OrderTO toOrderTO(OrderEntity orderEntity) {
 		if (orderEntity == null)
 			return null;
@@ -40,6 +48,14 @@ public class OrderMapper {
 
 	}
 
+	/**
+	 * This is the method which map order TO to order entity.
+	 * 
+	 * @param OrderTO
+	 *            as order.
+	 * 
+	 * @return OrderEntity as order.
+	 */
 	public OrderEntity toOrderEntity(OrderTO orderTO) {
 		if (orderTO == null)
 			return null;
@@ -60,10 +76,26 @@ public class OrderMapper {
 		return orderEntityBuilder.build();
 	}
 
+	/**
+	 * This is the method which map list of order entities to order TOs.
+	 * 
+	 * @param List
+	 *            of OrderEntities as list of orders.
+	 * 
+	 * @return List of orderTOs.
+	 */
 	public List<OrderTO> map2TOs(List<OrderEntity> orderEntities) {
 		return orderEntities.stream().map(this::toOrderTO).collect(Collectors.toList());
 	}
 
+	/**
+	 * This is the method which map list of order TOs to order entities.
+	 * 
+	 * @param List
+	 *            of OrderTOs as list of orders.
+	 * 
+	 * @return List of orderEntities.
+	 */
 	public List<OrderEntity> map2Entities(List<OrderTO> orderTOs) {
 		return orderTOs.stream().map(this::toOrderEntity).collect(Collectors.toList());
 	}

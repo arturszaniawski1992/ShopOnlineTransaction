@@ -21,6 +21,14 @@ public class CustomerMapper {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	/**
+	 * This is the method which map customer entity to customer TO.
+	 * 
+	 * @param CustomerEntity
+	 *            as customer.
+	 * 
+	 * @return CustomerTO as customer.
+	 */
 	public CustomerTO toCustomerTO(CustomerEntity customerEntity) {
 		if (customerEntity == null)
 			return null;
@@ -39,6 +47,14 @@ public class CustomerMapper {
 		return customerTOBuilder.build();
 	}
 
+	/**
+	 * This is the method which map customer TO to customer entity.
+	 * 
+	 * @param CustomerTO
+	 *            as customer.
+	 * 
+	 * @return CustomerEntity as customer.
+	 */
 	public CustomerEntity toCustomerEntity(CustomerTO customerTO) {
 		if (customerTO == null)
 			return null;
@@ -61,10 +77,26 @@ public class CustomerMapper {
 
 	}
 
+	/**
+	 * This is the method which map list of customers entities to customer TOs.
+	 * 
+	 * @param List
+	 *            of CustomerEntities as list of customers.
+	 * 
+	 * @return List of customerTOs.
+	 */
 	public List<CustomerTO> map2TOs(List<CustomerEntity> carEntities) {
 		return carEntities.stream().map(this::toCustomerTO).collect(Collectors.toList());
 	}
 
+	/**
+	 * This is the method which map list of customers TOs to customer entities.
+	 * 
+	 * @param List
+	 *            of CustomerTOs as list of customers.
+	 * 
+	 * @return List of customerEntities.
+	 */
 	public List<CustomerEntity> map2Entities(List<CustomerTO> customerTOs) {
 		return customerTOs.stream().map(this::toCustomerEntity).collect(Collectors.toList());
 	}

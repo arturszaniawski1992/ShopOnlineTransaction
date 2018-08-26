@@ -428,4 +428,57 @@ public class TransactionServiceTest {
 		// then
 		assertEquals(125.0, result, 0.001);
 	}
+
+	@Test
+	public void shouldCalculateTotalCostOfCustomerTransactions() throws NoValidConnection {
+		final Date date1 = java.sql.Date.valueOf("2017-11-15");
+		final Date date2 = java.sql.Date.valueOf("2017-12-15");
+		final Date date3 = java.sql.Date.valueOf("2018-01-15");
+		final Date date4 = java.sql.Date.valueOf("2018-02-15");
+		final Date date5 = java.sql.Date.valueOf("2018-03-15");
+
+		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
+				.withStreet("Warszawska").build();
+
+		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("malysz").withAdressData(adress)
+				.withMobile("79845654").build();
+		CustomerTO savedCustomer1 = customerService.saveCustomer(cust1);
+
+		CustomerTO cust2 = new CustomerTOBuilder().withFirstName("Jan").withLastName("kowalski").withAdressData(adress)
+				.withMobile("78545121").build();
+		CustomerTO savedCustomer2 = customerService.saveCustomer(cust2);
+
+		TransactionTO transaction1 = new TransactionTOBuilder().withAmount(1).withCustomerId(savedCustomer1.getId())
+				.withTransactionStatus(TransactionStatus.IN_PROGRESS).withDateTransaction(date1).build();
+		TransactionTO savedTransaction1 = transactionService.saveTransaction(transaction1);
+		TransactionTO transaction2 = new TransactionTOBuilder().withAmount(1).withCustomerId(savedCustomer2.getId())
+				.withTransactionStatus(TransactionStatus.EXECUTED).withDateTransaction(date2).build();
+		TransactionTO savedTransaction2 = transactionService.saveTransaction(transaction1);
+
+		customerService.assignTransaction(savedCustomer1, savedTransaction1);
+		transactionService.assignCustomer(savedTransaction1, savedCustomer1);
+		customerService.assignTransaction(savedCustomer2, savedTransaction2);
+		transactionService.assignCustomer(savedTransaction2, savedCustomer2);
+
+		PurchasedProductTO product = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
+				.withPrice(10.0).withWeight(12.0).build();
+		PurchasedProductTO savedProduct = purchasedProductService.savePurchasedProduct(product);
+
+		OrderTO order1 = new OrderTOBuilder().withAmount(2).withProductTOId(savedProduct.getId())
+				.withTransactionTO(savedTransaction1.getId()).build();
+		OrderTO savedOrder1 = orderService.saveOrder(order1);
+
+		OrderTO order2 = new OrderTOBuilder().withAmount(3).withProductTOId(savedProduct.getId())
+				.withTransactionTO(savedTransaction2.getId()).build();
+		OrderTO savedOrder2 = orderService.saveOrder(order2);
+
+		Date dateFrom = java.sql.Date.valueOf("1992-11-15");
+		Date dateTo = java.sql.Date.valueOf("2018-11-15");
+		// when
+		Double result1 = transactionService.calculateTotalCostOfCustomerTransactions(savedCustomer1.getId());
+		Double result2 = transactionService.calculateTotalCostOfCustomerTransactions(savedCustomer2.getId());
+		// then
+		assertEquals(20.0, result1, 0.001);
+		assertEquals(30.0, result2, 0.001);
+	}
 }

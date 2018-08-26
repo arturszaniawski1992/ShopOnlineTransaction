@@ -17,9 +17,17 @@ import com.capgemini.types.TransactionTO.TransactionTOBuilder;
 
 @Component
 public class TransactionMapper {
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	/**
+	 * This is the method which map transaction entity to transaction TOs.
+	 * 
+	 * @param TransactionEntity
+	 *            as transaction. F
+	 * @return TransactionTO as transaction.
+	 */
 	public TransactionTO toTransactionTO(TransactionEntity transactionEntity) {
 		if (transactionEntity == null)
 			return null;
@@ -38,6 +46,14 @@ public class TransactionMapper {
 		return transactionTOBuilder.build();
 	}
 
+	/**
+	 * This is the method which map transaction TO to transaction entity.
+	 * 
+	 * @param TransactionTO
+	 *            as transaction.
+	 * 
+	 * @return TransactionEntity as transaction.
+	 */
 	public TransactionEntity toTransactionEntity(TransactionTO transactionTO) {
 		if (transactionTO == null)
 			return null;
@@ -59,10 +75,28 @@ public class TransactionMapper {
 
 	}
 
+	/**
+	 * This is the method which map list of transaction entities to transaction
+	 * TOs.
+	 * 
+	 * @param List
+	 *            of transactionEntities as list of transactions.
+	 * 
+	 * @return List of TransactionTOs.
+	 */
 	public List<TransactionTO> map2TOs(List<TransactionEntity> transactionEntities) {
 		return transactionEntities.stream().map(this::toTransactionTO).collect(Collectors.toList());
 	}
 
+	/**
+	 * This is the method which map list of transaction TOs to transaction
+	 * entities.
+	 * 
+	 * @param List
+	 *            of transactionTOs as list of transactions.
+	 * 
+	 * @return List of TransactionEntities.
+	 */
 	public List<TransactionEntity> map2Entities(List<TransactionTO> transactionTOs) {
 		return transactionTOs.stream().map(this::toTransactionEntity).collect(Collectors.toList());
 	}

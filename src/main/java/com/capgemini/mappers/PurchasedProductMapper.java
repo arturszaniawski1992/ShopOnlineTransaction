@@ -20,6 +20,14 @@ public class PurchasedProductMapper {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	/**
+	 * This is the method which map product TO to product entity.
+	 * 
+	 * @param PurchasedProductEntity
+	 *            as product.
+	 * 
+	 * @return PurchasedProductTO as product.
+	 */
 	public PurchasedProductTO toPurchasedProductTO(PurchasedProductEntity purchasedProductEntity) {
 		if (purchasedProductEntity == null)
 			return null;
@@ -36,6 +44,14 @@ public class PurchasedProductMapper {
 		return purchasedProductTOBuilder.build();
 	}
 
+	/**
+	 * This is the method which map product entity to product TO.
+	 * 
+	 * @param PurchasedProductTO
+	 *            as product.
+	 * 
+	 * @return PurchasedProductEntity as product.
+	 */
 	public PurchasedProductEntity toPurchasedProductEntity(PurchasedProductTO purchasedProductTO) {
 		if (purchasedProductTO == null)
 			return null;
@@ -57,10 +73,26 @@ public class PurchasedProductMapper {
 
 	}
 
+	/**
+	 * This is the method which map list of product entities to product TOs.
+	 * 
+	 * @param List
+	 *            of purchasedProductEntities as list of products.
+	 * 
+	 * @return List of productTOs.
+	 */
 	public List<PurchasedProductTO> map2TOs(List<PurchasedProductEntity> purchasedProductEntities) {
 		return purchasedProductEntities.stream().map(this::toPurchasedProductTO).collect(Collectors.toList());
 	}
 
+	/**
+	 * This is the method which map list of product TOs to product entities.
+	 * 
+	 * @param List
+	 *            of purchasedProductTOs as list of products.
+	 * 
+	 * @return List of PurchasedProductEntities.
+	 */
 	public List<PurchasedProductEntity> map2Entities(List<PurchasedProductTO> purchasedProductTOs) {
 		return purchasedProductTOs.stream().map(this::toPurchasedProductEntity).collect(Collectors.toList());
 	}
