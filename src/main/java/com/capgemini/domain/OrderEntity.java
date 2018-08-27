@@ -184,48 +184,4 @@ public class OrderEntity extends AbstractEntity implements Serializable {
 		}
 	}
 
-	/**
-	 * This is the method which assign order to transaction.
-	 * 
-	 * @param TransactionEntity
-	 *            as transaction for order.
-	 */
-	public void assignTransaction(TransactionEntity transactionEntity) {
-		this.transactionEntity = transactionEntity;
-		transactionEntity.addOrder(this);
-	}
-
-	/**
-	 * This is the method which remove order from transaction.
-	 * 
-	 * @param TransactionEntity
-	 *            as transaction for order.
-	 */
-	public void removeTransaction() {
-		transactionEntity.removeOrder(this);
-		transactionEntity = null;
-	}
-
-	/**
-	 * This is the method which assign order to product.
-	 * 
-	 * @param TransactionEntity
-	 *            as transaction for order.
-	 */
-	public void assignProduct(PurchasedProductEntity productEntity) {
-		this.productEntity = productEntity;
-		productEntity.addOrder(this);
-	}
-
-	/**
-	 * This is the method which remove order from product.
-	 * 
-	 * @param TransactionEntity
-	 *            as transaction for order.
-	 */
-	public void removeProduct() {
-		productEntity.removeOrder(this);
-		productEntity = null;
-	}
-
 }

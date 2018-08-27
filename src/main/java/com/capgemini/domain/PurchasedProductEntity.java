@@ -117,32 +117,6 @@ public class PurchasedProductEntity extends AbstractEntity implements Serializab
 		this.orders = orders;
 	}
 
-	/**
-	 * This is the method which add order to product.
-	 * 
-	 * @param OrderEntity
-	 *            as order.
-	 */
-	public boolean addOrder(OrderEntity orderEntity) {
-		if (orders == null) {
-			orders = new ArrayList<>();
-		}
-		return orders.add(orderEntity);
-	}
-
-	/**
-	 * This is the method which remove order from product.
-	 * 
-	 * @param OrderEntity
-	 *            as order.
-	 */
-	public boolean removeOrder(OrderEntity orderEntity) {
-		if (orders == null) {
-			return false;
-		}
-		return orders.remove(orderEntity);
-	}
-
 	public static class PurchasedProductEntityBuilder {
 		private Long version;
 		private Long id;

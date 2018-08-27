@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.capgemini.enums.TransactionStatus;
 import com.capgemini.exception.InvalidCreationException;
 import com.capgemini.exception.NoValidConnection;
-import com.capgemini.exception.TransactionNotAllowedException;
 import com.capgemini.types.AdressDataTO;
 import com.capgemini.types.AdressDataTO.AdressDataTOBuilder;
 import com.capgemini.types.CustomerTO;
@@ -27,7 +26,6 @@ import com.capgemini.types.OrderTO;
 import com.capgemini.types.OrderTO.OrderTOBuilder;
 import com.capgemini.types.PurchasedProductTO;
 import com.capgemini.types.PurchasedProductTO.PurchasedProductTOBuilder;
-import com.capgemini.types.TransactionSearchCriteria;
 import com.capgemini.types.TransactionTO;
 import com.capgemini.types.TransactionTO.TransactionTOBuilder;
 
@@ -503,4 +501,5 @@ public class TransactionServiceTest {
 		transactionService.assignCustomer(savedTransaction, savedCustomer);
 	}
 
+	
 }
