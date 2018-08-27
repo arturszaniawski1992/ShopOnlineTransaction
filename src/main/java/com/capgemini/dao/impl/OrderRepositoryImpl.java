@@ -1,4 +1,4 @@
-package com.capgemini.dao.customize.impl;
+package com.capgemini.dao.impl;
 
 import org.springframework.stereotype.Repository;
 

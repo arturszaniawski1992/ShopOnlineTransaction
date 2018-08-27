@@ -1,4 +1,4 @@
-package com.capgemini.dao.customize.impl;
+package com.capgemini.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
