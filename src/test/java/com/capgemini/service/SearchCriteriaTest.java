@@ -442,4 +442,40 @@ public class SearchCriteriaTest {
 		assertEquals(2, resultList.size());
 	}
 
+	@Test
+	public void shouldFindTransactionsByProductNameAndCustomerNametUsingSearchCriteria() throws NoValidConnection {
+		// given
+		PurchasedProductTO product1 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
+				.withPrice(125.0).withWeight(10.0).build();
+		PurchasedProductTO product2 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
+				.withPrice(125.0).withWeight(10.0).build();
+		PurchasedProductTO product3 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
+				.withPrice(125.0).withWeight(10.0).build();
+		PurchasedProductTO savedProduct1 = purchasedProductService.savePurchasedProduct(product1);
+		PurchasedProductTO savedProduct2 = purchasedProductService.savePurchasedProduct(product2);
+		PurchasedProductTO savedProduct3 = purchasedProductService.savePurchasedProduct(product3);
+
+		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
+				.withStreet("Warszawska").build();
+		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("Szaniawski")
+				.withAdressData(adress).withMobile("4564564564").build();
+		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
+
+		TransactionTO transaction = new TransactionTOBuilder().withAmount(10).withCustomerId(savedCustomer.getId())
+				.withTransactionStatus(TransactionStatus.EXECUTED).build();
+		TransactionTO savedTransaction = transactionService.saveTransaction(transaction);
+		OrderTO order = new OrderTOBuilder().withAmount(10).withProductTOId(savedProduct1.getId())
+				.withTransactionTO(savedTransaction.getId()).build();
+		OrderTO savedOrder = orderService.saveOrder(order);
+		// when
+		TransactionSearchCriteria searchCriteria = new TransactionSearchCriteria();
+		searchCriteria.setCustomerName("Szaniawski");
+		searchCriteria.setProductId(savedProduct1.getId());
+		List<TransactionTO> resultList = transactionService.searchForTransactionsBySearchCriteria(searchCriteria);
+
+		// then
+		assertNotNull(resultList);
+		assertEquals(1, resultList.size());
+	}
+
 }

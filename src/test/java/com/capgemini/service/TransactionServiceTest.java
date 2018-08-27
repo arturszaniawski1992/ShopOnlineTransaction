@@ -181,10 +181,12 @@ public class TransactionServiceTest {
 		TransactionTO savedTransaction2 = transactionService.saveTransaction(transaction);
 
 		// when
-		List<TransactionTO> selectedTransaction = transactionService.findAllTranactions();
+		List<TransactionTO> selectedTransactions = transactionService.findAllTranactions();
 
 		// then
-		assertEquals(2, selectedTransaction.size());
+		assertEquals(2, selectedTransactions.size());
+		assertThat(savedTransaction.getId()).isEqualTo(selectedTransactions.get(0).getId());
+
 	}
 
 	@Test
@@ -317,8 +319,8 @@ public class TransactionServiceTest {
 
 	@Test
 	public void shouldCalculateProfitFromPeriod() throws NoValidConnection {
-		final Date date1 = java.sql.Date.valueOf("2017-11-15");
-		final Date date2 = java.sql.Date.valueOf("2018-12-15");
+		Date date1 = new Date(1000L);
+		Date date2 = new Date(2000L);
 		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
 				.withStreet("Warszawska").build();
 
@@ -344,7 +346,7 @@ public class TransactionServiceTest {
 		transactionService.assignCustomer(savedTransaction2, savedCustomer2);
 
 		PurchasedProductTO product = new PurchasedProductTOBuilder().withMargin(1.0).withProductName("ball")
-				.withPrice(10.0).withWeight(12.0).build();
+				.withPrice(10.0).withWeight(1.0).build();
 		PurchasedProductTO savedProduct = purchasedProductService.savePurchasedProduct(product);
 
 		OrderTO order1 = new OrderTOBuilder().withAmount(2).withProductTOId(savedProduct.getId())
@@ -352,17 +354,18 @@ public class TransactionServiceTest {
 		OrderTO savedOrder1 = orderService.saveOrder(order1);
 
 		OrderTO order2 = new OrderTOBuilder().withAmount(3).withProductTOId(savedProduct.getId())
-				.withTransactionTO(savedTransaction2.getId()).build();
+				.withTransactionTO(savedTransaction1.getId()).build();
 		OrderTO savedOrder2 = orderService.saveOrder(order2);
 
-		Date dateFrom = java.sql.Date.valueOf("2017-11-15");
-		Date dateTo = java.sql.Date.valueOf("2018-12-15");
+		Date dateFrom = new Date(500L);
+		Date dateTo = new Date(3000L);
+
 		// when
 		transactionService.saveTransaction(transaction1);
 		transactionService.saveTransaction(transaction2);
 		Double result = transactionService.calculateProfitFromPeriod(dateFrom, dateTo);
 		// then
-		assertEquals(125.0, result, 0.001);
+		assertEquals(50.0, result, 0.001);
 		assertNotNull(result);
 	}
 
@@ -474,42 +477,8 @@ public class TransactionServiceTest {
 		assertNotNull(orderService.findOrderById(savedOrder.getId()));
 	}
 
-	@Test(expected = TransactionNotAllowedException.class)
-	public void shouldThrowTransactionNotAllowedByProceAndQuantity() throws NoValidConnection {
-		PurchasedProductTO product = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
-				.withPrice(7200.0).withWeight(12.0).build();
-		PurchasedProductTO savedProduct = purchasedProductService.savePurchasedProduct(product);
-		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
-				.withStreet("Warszawska").build();
-		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("Szaniawski")
-				.withAdressData(adress).withMobile("4564564564").build();
-		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
-
-		List<PurchasedProductTO> products = new ArrayList<>();
-		products.add(savedProduct);
-		products.add(savedProduct);
-		products.add(savedProduct);
-		products.add(savedProduct);
-		products.add(savedProduct);
-		products.add(savedProduct);
-
-		TransactionTO transaction = new TransactionTOBuilder().withAmount(15).withCustomerId(savedCustomer.getId())
-				.withTransactionStatus(TransactionStatus.EXECUTED).build();
-		TransactionTO savedTransaction1 = transactionService.saveTransaction(transaction);
-		TransactionTO savedTransaction2 = transactionService.saveTransaction(transaction);
-		TransactionTO savedTransaction3 = transactionService.saveTransaction(transaction);
-
-		OrderTO order1 = new OrderTOBuilder().withAmount(45).withProductTOId(savedProduct.getId())
-				.withTransactionTO(savedTransaction3.getId()).build();
-		OrderTO savedOrder = orderService.saveOrder(order1);
-		customerService.assignTransaction(savedCustomer, savedTransaction1);
-		transactionService.assignCustomer(savedTransaction1, savedCustomer);
-		customerService.assignTransaction(savedCustomer, savedTransaction2);
-		transactionService.assignCustomer(savedTransaction2, savedCustomer);
-	}
-
 	@Test(expected = NoValidConnection.class)
-	public void shouldThrowTransactionNotAllowedByWeight() throws NoValidConnection {
+	public void shouldThrowNoValidConnection() throws NoValidConnection {
 
 		PurchasedProductTO product = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
 				.withPrice(7200.0).withWeight(12.0).build();
@@ -533,4 +502,5 @@ public class TransactionServiceTest {
 		customerService.assignTransaction(savedCustomer, savedTransaction);
 		transactionService.assignCustomer(savedTransaction, savedCustomer);
 	}
+
 }

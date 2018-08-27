@@ -8,13 +8,14 @@ import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.capgemini.dao.customize.CustomizedCustomerRepository;
+import com.capgemini.dao.CustomizedCustomerRepository;
 import com.capgemini.domain.CustomerEntity;
 import com.capgemini.domain.QCustomerEntity;
 import com.capgemini.domain.QOrderEntity;
 import com.capgemini.domain.QPurchasedProductEntity;
 import com.capgemini.domain.QTransactionEntity;
 import com.capgemini.domain.TransactionEntity;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Repository
@@ -27,6 +28,17 @@ public class CustomerRepositoryImpl implements CustomizedCustomerRepository {
 	public CustomerEntity assignTransaction(CustomerEntity customerEntity, TransactionEntity transactionEntity) {
 		customerEntity.addTransaction(transactionEntity);
 		return customerEntity;
+	}
+
+	@Override
+	public int getNumberOfTransationsForCustomer(Long clientId) {
+		JPAQuery<CustomerEntity> query = new JPAQuery(entityManager);
+		QTransactionEntity transactionEntity = QTransactionEntity.transactionEntity;
+
+		int result = query.from(transactionEntity).select(transactionEntity.id.count().intValue())
+				.where(transactionEntity.customerEntity.id.eq(clientId)).fetchOne();
+
+		return result;
 	}
 
 	// 2e

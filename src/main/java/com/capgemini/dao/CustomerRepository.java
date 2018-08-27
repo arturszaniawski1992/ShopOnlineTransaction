@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.capgemini.dao.customize.CustomizedCustomerRepository;
 import com.capgemini.domain.CustomerEntity;
 
 public interface CustomerRepository extends JpaRepository<CustomerEntity, Long>, CustomizedCustomerRepository {

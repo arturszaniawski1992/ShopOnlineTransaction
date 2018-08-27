@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.capgemini.dao.customize.CustomizedTransactionRepository;
+import com.capgemini.dao.CustomizedTransactionRepository;
 import com.capgemini.domain.CustomerEntity;
 import com.capgemini.domain.QCustomerEntity;
 import com.capgemini.domain.QOrderEntity;
@@ -104,13 +104,12 @@ public class TransactionRepositoryImpl implements CustomizedTransactionRepositor
 		QOrderEntity orderEntity = QOrderEntity.orderEntity;
 
 		JPAQueryFactory query = new JPAQueryFactory(entityManager);
-		Double result = query.from(transactionEntity).innerJoin(transactionEntity.orders, orderEntity)
-				.innerJoin(orderEntity.productEntity, purchasedProductEntity)
-				.where(transactionEntity.dateTransaction.between(dateFrom, dateTo)
-						.and(transactionEntity.transactionStatus.eq(TransactionStatus.FINISHED)))
-				.select((orderEntity.amount.doubleValue().multiply(purchasedProductEntity.price)
-						.multiply((purchasedProductEntity.margin).divide(100))).sum())
-				.fetchOne();
+		Double result = query.from(transactionEntity).join(transactionEntity.orders, orderEntity)
+				.join(orderEntity.productEntity, purchasedProductEntity)
+				.select((orderEntity.amount.multiply(purchasedProductEntity.price)
+						.multiply(purchasedProductEntity.margin)).sum().doubleValue())
+				.where(transactionEntity.dateTransaction.between(dateFrom, dateTo)).fetchOne();
+
 		return result;
 
 	}

@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.capgemini.dao.customize.CustomizedPurchasedProductRepository;
+import com.capgemini.dao.CustomizedPurchasedProductRepository;
 import com.capgemini.domain.PurchasedProductEntity;
 import com.capgemini.domain.QOrderEntity;
 import com.capgemini.domain.QPurchasedProductEntity;
@@ -51,9 +51,9 @@ public class PurchasedProductRepositoryImpl implements CustomizedPurchasedProduc
 	// 2d
 	@Override
 	public List<PurchasedProductEntity> getBestSellingProducts(int amount) {
+		JPAQuery<PurchasedProductEntity> query = new JPAQuery(entityManager);
 		QPurchasedProductEntity purchasedProductEntity = QPurchasedProductEntity.purchasedProductEntity;
 		QOrderEntity orderEntity = QOrderEntity.orderEntity;
-		JPAQuery<PurchasedProductEntity> query = new JPAQuery(entityManager);
 
 		List<PurchasedProductEntity> bestSellingProducts = query.from(purchasedProductEntity)
 				.select(purchasedProductEntity).join(purchasedProductEntity.orders, orderEntity).where()

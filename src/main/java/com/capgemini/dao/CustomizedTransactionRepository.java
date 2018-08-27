@@ -1,4 +1,4 @@
-package com.capgemini.dao.customize;
+package com.capgemini.dao;
 
 import java.sql.Date;
 import java.util.List;

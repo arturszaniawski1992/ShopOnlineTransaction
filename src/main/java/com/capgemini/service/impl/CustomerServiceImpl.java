@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.OptimisticLockException;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.capgemini.dao.CustomerRepository;
 import com.capgemini.dao.TransactionRepository;
@@ -15,7 +16,6 @@ import com.capgemini.mappers.CustomerMapper;
 import com.capgemini.service.CustomerService;
 import com.capgemini.types.CustomerTO;
 import com.capgemini.types.TransactionTO;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
@@ -74,6 +74,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	@Transactional(readOnly = false)
 	public void removeCustomer(Long id) {
+
 		customerRepository.deleteById(id);
 
 	}

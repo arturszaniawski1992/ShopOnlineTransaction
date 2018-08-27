@@ -1,4 +1,4 @@
-package com.capgemini.dao.customize;
+package com.capgemini.dao;
 
 import java.sql.Date;
 import java.util.List;
@@ -30,4 +30,13 @@ public interface CustomizedCustomerRepository {
 	public List<CustomerEntity> findTopThreeClientsWhoSpentTheMostInPeriod(Date dateFrom, Date dateTo,
 			int amountOfClients);
 
+	/**
+	 * This is the method which find amount of transactions per customer.
+	 * 
+	 * @param Long
+	 *            as id of customer.
+	 * 
+	 * @return int as number of transactions per customer of customers.
+	 */
+	public int getNumberOfTransationsForCustomer(Long clientId);
 }

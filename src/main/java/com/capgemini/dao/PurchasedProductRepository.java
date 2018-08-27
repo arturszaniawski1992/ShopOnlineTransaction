@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.capgemini.dao.customize.CustomizedPurchasedProductRepository;
 import com.capgemini.domain.PurchasedProductEntity;
 
 public interface PurchasedProductRepository

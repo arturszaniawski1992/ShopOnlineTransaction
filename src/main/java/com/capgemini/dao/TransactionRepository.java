@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.capgemini.dao.customize.CustomizedTransactionRepository;
 import com.capgemini.domain.TransactionEntity;
 import com.capgemini.enums.TransactionStatus;
 

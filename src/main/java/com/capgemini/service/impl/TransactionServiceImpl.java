@@ -1,7 +1,6 @@
 package com.capgemini.service.impl;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -9,11 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.capgemini.dao.CustomerRepository;
 import com.capgemini.dao.OrderRepository;
-import com.capgemini.dao.PurchasedProductRepository;
 import com.capgemini.dao.TransactionRepository;
 import com.capgemini.domain.CustomerEntity;
 import com.capgemini.domain.OrderEntity;
-import com.capgemini.domain.PurchasedProductEntity;
 import com.capgemini.domain.TransactionEntity;
 import com.capgemini.enums.TransactionStatus;
 import com.capgemini.exception.TransactionNotAllowedException;
@@ -32,74 +29,46 @@ public class TransactionServiceImpl implements TransactionService {
 	private final TransactionRepository transactionRepository;
 	private final TransactionMapper transactionMapper;
 
-	private final PurchasedProductRepository purchasedProductRepository;
-
 	private final OrderRepository orderRepository;
 
 	public TransactionServiceImpl(CustomerRepository customerRepository, TransactionRepository transactionRepository,
-			TransactionMapper transactionMapper, PurchasedProductRepository purchasedProductRepository,
-			OrderRepository orderRepository) {
+			TransactionMapper transactionMapper, OrderRepository orderRepository) {
 		super();
 		this.customerRepository = customerRepository;
 		this.transactionRepository = transactionRepository;
 		this.transactionMapper = transactionMapper;
-		this.purchasedProductRepository = purchasedProductRepository;
 		this.orderRepository = orderRepository;
 	}
 
-	private void checkIfTransactionIsAllowed(CustomerEntity customerEntity, List<PurchasedProductEntity> products)
-			throws TransactionNotAllowedException {
-		checkIfCustomerHasLessThanThreeTransaction(customerEntity, products);
-		checkIfWeightOfProductsIsLessThanLimit(products);
-		checkIfTransactionHasMoreThanFiveSameLuxuryProducts(products);
-
+	public void validateTransaction(Long transactionId) throws TransactionNotAllowedException {
+		validateTransactionValueForBeginnerCustomer(transactionId);
+		validateProductsWeight(transactionId);
 	}
 
-	private void checkIfCustomerHasLessThanThreeTransaction(CustomerEntity customerEntity,
-			List<PurchasedProductEntity> products) throws TransactionNotAllowedException {
-		if (customerEntity.getTransactions() == null || customerEntity.getTransactions().size() <= 3) {
-			Double sumOfOrders = 0.0;
-			for (PurchasedProductEntity product : products) {
-				sumOfOrders = product.getPrice();
+	private void validateTransactionValueForBeginnerCustomer(Long transactionId) throws TransactionNotAllowedException {
+		TransactionEntity transaction = transactionRepository.findOne(transactionId);
+		if (transaction.getCustomerEntity() == null)
+			return;
+		if (customerRepository.getNumberOfTransationsForCustomer(transaction.getId()) < 3) {
+			Double transactionValue = 0.0;
+			for (OrderEntity order : transaction.getOrders()) {
+				transactionValue += order.getAmount() * order.getProductEntity().getPrice();
 			}
-			if (sumOfOrders > 5000.0) {
-				throw new TransactionNotAllowedException();
+			if (transactionValue > 5000.0) {
+				throw new TransactionNotAllowedException("You can not buy these items!");
 			}
 		}
 	}
 
-	private void checkIfWeightOfProductsIsLessThanLimit(List<PurchasedProductEntity> products)
-			throws TransactionNotAllowedException {
-		Double limitWeight = 25.0;
-		Double sumOfWeight = 0.0;
-		for (PurchasedProductEntity productEntity : products) {
-			sumOfWeight = productEntity.getWeight();
+	private void validateProductsWeight(Long transactionId) throws TransactionNotAllowedException {
+		TransactionEntity transaction = transactionRepository.findOne(transactionId);
+
+		Double productsWeight = 0.0;
+		for (OrderEntity order : transaction.getOrders()) {
+			productsWeight = order.getAmount() * order.getProductEntity().getWeight();
 		}
-		if (sumOfWeight > limitWeight) {
-			throw new TransactionNotAllowedException();
-		}
-	}
-
-	private void checkIfTransactionHasMoreThanFiveSameLuxuryProducts(List<PurchasedProductEntity> products)
-			throws TransactionNotAllowedException {
-		List<PurchasedProductEntity> expensiveProduct = new ArrayList<>();
-		for (PurchasedProductEntity product : products) {
-
-			if (product.getPrice() > 7000.0) {
-				expensiveProduct.add(product);
-			}
-
-			for (int i = 0; i < expensiveProduct.size() - 1; i++) {
-				int count = 1;
-				for (int j = 1; j < expensiveProduct.size(); j++) {
-					if (expensiveProduct.get(i).getId() == expensiveProduct.get(j).getId()) {
-						count++;
-					}
-					if (count > 5) {
-						throw new TransactionNotAllowedException();
-					}
-				}
-			}
+		if (productsWeight > 25.0) {
+			throw new TransactionNotAllowedException("Maximum weight of items can not be over 25 kilos!");
 		}
 	}
 
@@ -132,13 +101,9 @@ public class TransactionServiceImpl implements TransactionService {
 
 		CustomerEntity customerEntity = customerRepository.findById(transactionEntity.getCustomerEntity().getId());
 		transactionEntity.setCustomerEntity(customerEntity);
-
 		List<OrderEntity> orderEntity = orderRepository.findAll();
 		transactionEntity.setOrders(orderEntity);
-		List<PurchasedProductEntity> products = purchasedProductRepository.findAll();
-
-		checkIfTransactionIsAllowed(customerEntity, products);
-
+		validateTransaction(transactionEntity.getId());
 		transactionRepository.save(transactionEntity);
 
 		return transactionMapper.toTransactionTO(transactionEntity);
