@@ -90,10 +90,4 @@ public class OrderServiceImpl implements OrderService {
 		orderRepository.delete(id);
 	}
 
-	@Override
-	public OrderTO findByAmount(Long amount) {
-		return orderMapper.toOrderTO(orderRepository.findByAmount(amount));
-
-	}
-
 }

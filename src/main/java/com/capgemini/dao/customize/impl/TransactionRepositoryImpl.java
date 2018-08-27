@@ -112,6 +112,7 @@ public class TransactionRepositoryImpl implements CustomizedTransactionRepositor
 						.multiply((purchasedProductEntity.margin).divide(100))).sum())
 				.fetchOne();
 		return result;
+
 	}
 
 	// 2b

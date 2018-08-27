@@ -52,14 +52,4 @@ public interface OrderService {
 	 */
 	void removeOrder(Long id);
 
-	/**
-	 * This is the method which find order by its amount.
-	 * 
-	 * @param Long
-	 *            as amount of order.
-	 * @return OrderTO as order.
-	 * 
-	 */
-	public OrderTO findByAmount(Long amount);
-
 }

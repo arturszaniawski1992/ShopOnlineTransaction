@@ -188,184 +188,6 @@ public class TransactionServiceTest {
 	}
 
 	@Test
-	public void shouldFindTransactionsByAmountUsingSearchCriteria() throws NoValidConnection {
-		// given
-		PurchasedProductTO product1 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
-				.withPrice(125.0).withWeight(10.0).build();
-		PurchasedProductTO product2 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
-				.withPrice(125.0).withWeight(10.0).build();
-		PurchasedProductTO product3 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
-				.withPrice(125.0).withWeight(10.0).build();
-		PurchasedProductTO savedProduct1 = purchasedProductService.savePurchasedProduct(product1);
-		PurchasedProductTO savedProduct2 = purchasedProductService.savePurchasedProduct(product2);
-		PurchasedProductTO savedProduct3 = purchasedProductService.savePurchasedProduct(product3);
-
-		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
-				.withStreet("Warszawska").build();
-		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("Szaniawski")
-				.withAdressData(adress).withMobile("4564564564").build();
-		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
-
-		TransactionTO transaction = new TransactionTOBuilder().withAmount(10).withCustomerId(savedCustomer.getId())
-				.withTransactionStatus(TransactionStatus.EXECUTED).build();
-		TransactionTO savedTransaction = transactionService.saveTransaction(transaction);
-		OrderTO order = new OrderTOBuilder().withAmount(10).withProductTOId(savedProduct1.getId())
-				.withTransactionTO(savedTransaction.getId()).build();
-		OrderTO savedOrder = orderService.saveOrder(order);
-		// when
-		TransactionSearchCriteria searchCriteria = new TransactionSearchCriteria();
-		searchCriteria.setTotalTransactionAmount(1250.0);
-		List<TransactionTO> resultList = transactionService.searchForTransactionsBySearchCriteria(searchCriteria);
-
-		// then
-		assertNotNull(resultList);
-		assertEquals(1, resultList.size());
-	}
-
-	@Test
-	public void shouldFindTransactionsByProductUsingSearchCriteria() throws NoValidConnection {
-		// given
-		PurchasedProductTO product1 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
-				.withPrice(125.0).withWeight(10.0).build();
-		PurchasedProductTO product2 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
-				.withPrice(125.0).withWeight(10.0).build();
-		PurchasedProductTO product3 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
-				.withPrice(125.0).withWeight(10.0).build();
-		PurchasedProductTO savedProduct1 = purchasedProductService.savePurchasedProduct(product1);
-		PurchasedProductTO savedProduct2 = purchasedProductService.savePurchasedProduct(product2);
-		PurchasedProductTO savedProduct3 = purchasedProductService.savePurchasedProduct(product3);
-
-		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
-				.withStreet("Warszawska").build();
-		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("Szaniawski")
-				.withAdressData(adress).withMobile("4564564564").build();
-		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
-
-		Date dateTransaction = java.sql.Date.valueOf("2017-11-15");
-		TransactionTO transaction = new TransactionTOBuilder().withAmount(15).withDateTransaction(dateTransaction)
-				.withCustomerId(savedCustomer.getId()).withTransactionStatus(TransactionStatus.EXECUTED).build();
-		TransactionTO savedTransaction = transactionService.saveTransaction(transaction);
-		OrderTO order = new OrderTOBuilder().withAmount(15).withProductTOId(savedProduct1.getId())
-				.withTransactionTO(savedTransaction.getId()).build();
-		OrderTO savedOrder = orderService.saveOrder(order);
-		customerService.assignTransaction(savedCustomer, savedTransaction);
-		transactionService.assignCustomer(savedTransaction, savedCustomer);
-		// when
-		TransactionSearchCriteria searchCriteria = new TransactionSearchCriteria();
-		searchCriteria.setProductId(savedProduct1.getId());
-		List<TransactionTO> resultList = transactionService.searchForTransactionsBySearchCriteria(searchCriteria);
-
-		// then
-		assertNotNull(resultList);
-		assertEquals(1, resultList.size());
-	}
-
-	@Test
-	public void shouldFindTransactionsByDateToUsingSearchCriteria() throws NoValidConnection {
-		// given
-		PurchasedProductTO product1 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
-				.withPrice(125.0).withWeight(10.0).build();
-		PurchasedProductTO product2 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
-				.withPrice(125.0).withWeight(10.0).build();
-		PurchasedProductTO product3 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
-				.withPrice(125.0).withWeight(10.0).build();
-		PurchasedProductTO savedProduct1 = purchasedProductService.savePurchasedProduct(product1);
-		PurchasedProductTO savedProduct2 = purchasedProductService.savePurchasedProduct(product2);
-		PurchasedProductTO savedProduct3 = purchasedProductService.savePurchasedProduct(product3);
-
-		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
-				.withStreet("Warszawska").build();
-		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("Szaniawski")
-				.withAdressData(adress).withMobile("4564564564").build();
-		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
-
-		Date date1 = new Date(1500L);
-
-		TransactionTO transaction1 = new TransactionTOBuilder().withAmount(15).withDateTransaction(date1)
-				.withCustomerId(savedCustomer.getId()).withTransactionStatus(TransactionStatus.EXECUTED).build();
-		TransactionTO savedTransaction1 = transactionService.saveTransaction(transaction1);
-
-		TransactionTO transaction2 = new TransactionTOBuilder().withAmount(98).withDateTransaction(date1)
-				.withCustomerId(savedCustomer.getId()).withTransactionStatus(TransactionStatus.EXECUTED).build();
-		TransactionTO savedTransaction2 = transactionService.saveTransaction(transaction2);
-
-		OrderTO order = new OrderTOBuilder().withAmount(15).withProductTOId(savedProduct1.getId())
-				.withTransactionTO(savedTransaction1.getId()).build();
-		OrderTO savedOrder = orderService.saveOrder(order);
-
-		OrderTO order2 = new OrderTOBuilder().withAmount(15).withProductTOId(savedProduct1.getId())
-				.withTransactionTO(savedTransaction2.getId()).build();
-		OrderTO savedOrder2 = orderService.saveOrder(order2);
-
-		customerService.assignTransaction(savedCustomer, savedTransaction1);
-		transactionService.assignCustomer(savedTransaction1, savedCustomer);
-		customerService.assignTransaction(savedCustomer, savedTransaction2);
-		transactionService.assignCustomer(savedTransaction2, savedCustomer);
-		// when
-		Date dateFrom = new Date(1000L);
-		Date dateTo = new Date(2000L);
-		List<TransactionTO> transactions = transactionService.findAllTranactions();
-		TransactionSearchCriteria searchCriteria = new TransactionSearchCriteria();
-		searchCriteria.setDateFrom(dateFrom);
-		searchCriteria.setDateTo(dateTo);
-		List<TransactionTO> resultList = transactionService.searchForTransactionsBySearchCriteria(searchCriteria);
-
-		// then
-
-		assertEquals(date1, savedTransaction1.getDateTransaction());
-		assertNotNull(resultList);
-		assertEquals(2, resultList.size());
-		assertEquals(2, transactions.size());
-	}
-
-	@Test
-	public void shouldFindTransactionsByCustomerNameUsingSearchCriteria() throws NoValidConnection {
-		// given
-		PurchasedProductTO product1 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
-				.withPrice(125.0).withWeight(10.0).build();
-		PurchasedProductTO product2 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
-				.withPrice(125.0).withWeight(10.0).build();
-		PurchasedProductTO product3 = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
-				.withPrice(125.0).withWeight(10.0).build();
-		PurchasedProductTO savedProduct1 = purchasedProductService.savePurchasedProduct(product1);
-		PurchasedProductTO savedProduct2 = purchasedProductService.savePurchasedProduct(product2);
-		PurchasedProductTO savedProduct3 = purchasedProductService.savePurchasedProduct(product3);
-
-		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
-				.withStreet("Warszawska").build();
-		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("Szaniawski")
-				.withAdressData(adress).withMobile("4564564564").build();
-		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
-		CustomerTO cust2 = new CustomerTOBuilder().withFirstName("Adam").withLastName("Szaniawski")
-				.withAdressData(adress).withMobile("4564564564").build();
-		CustomerTO savedCustomer2 = customerService.saveCustomer(cust2);
-		Date dateTransaction = java.sql.Date.valueOf("2018-11-15");
-
-		TransactionTO transaction = new TransactionTOBuilder().withAmount(15).withDateTransaction(dateTransaction)
-				.withCustomerId(savedCustomer.getId()).withTransactionStatus(TransactionStatus.EXECUTED).build();
-		TransactionTO savedTransaction = transactionService.saveTransaction(transaction);
-		TransactionTO transaction2 = new TransactionTOBuilder().withAmount(15).withDateTransaction(dateTransaction)
-				.withCustomerId(savedCustomer2.getId()).withTransactionStatus(TransactionStatus.EXECUTED).build();
-		TransactionTO savedTransaction2 = transactionService.saveTransaction(transaction2);
-		customerService.assignTransaction(savedCustomer, savedTransaction);
-		transactionService.assignCustomer(savedTransaction, savedCustomer);
-
-		OrderTO order1 = new OrderTOBuilder().withAmount(10).withProductTOId(savedProduct1.getId())
-				.withTransactionTO(savedTransaction.getId()).build();
-		OrderTO savedOrder = orderService.saveOrder(order1);
-		List<Long> orders = new ArrayList<>();
-		orders.add(order1.getId());
-		// when
-		TransactionSearchCriteria searchCriteria = new TransactionSearchCriteria();
-		searchCriteria.setCustomerName("Szaniawski");
-		List<TransactionTO> resultList = transactionService.searchForTransactionsBySearchCriteria(searchCriteria);
-
-		// then
-		assertNotNull(resultList);
-		assertEquals(1, resultList.size());
-	}
-
-	@Test
 	public void shouldAssignTransactionToCustomer() {
 
 		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
@@ -511,6 +333,7 @@ public class TransactionServiceTest {
 		TransactionTO transaction1 = new TransactionTOBuilder().withAmount(1).withCustomerId(savedCustomer1.getId())
 				.withTransactionStatus(TransactionStatus.IN_PROGRESS).withDateTransaction(date1).build();
 		TransactionTO savedTransaction1 = transactionService.saveTransaction(transaction1);
+
 		TransactionTO transaction2 = new TransactionTOBuilder().withAmount(1).withCustomerId(savedCustomer2.getId())
 				.withTransactionStatus(TransactionStatus.EXECUTED).withDateTransaction(date2).build();
 		TransactionTO savedTransaction2 = transactionService.saveTransaction(transaction1);
@@ -520,7 +343,7 @@ public class TransactionServiceTest {
 		customerService.assignTransaction(savedCustomer2, savedTransaction2);
 		transactionService.assignCustomer(savedTransaction2, savedCustomer2);
 
-		PurchasedProductTO product = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
+		PurchasedProductTO product = new PurchasedProductTOBuilder().withMargin(1.0).withProductName("ball")
 				.withPrice(10.0).withWeight(12.0).build();
 		PurchasedProductTO savedProduct = purchasedProductService.savePurchasedProduct(product);
 
@@ -612,7 +435,8 @@ public class TransactionServiceTest {
 		TransactionTO transaction = new TransactionTOBuilder().withAmount(15).withCustomerId(savedCustomer.getId())
 				.withTransactionStatus(TransactionStatus.EXECUTED).build();
 		TransactionTO savedTransaction = transactionService.saveTransaction(transaction);
-
+		customerService.assignTransaction(savedCustomer, savedTransaction);
+		transactionService.assignCustomer(savedTransaction, savedCustomer);
 		// when
 		transactionService.removeTransaction(savedTransaction.getId());
 
@@ -641,7 +465,8 @@ public class TransactionServiceTest {
 		OrderTO order1 = new OrderTOBuilder().withAmount(45).withProductTOId(savedProduct.getId())
 				.withTransactionTO(savedTransaction.getId()).build();
 		OrderTO savedOrder = orderService.saveOrder(order1);
-
+		customerService.assignTransaction(savedCustomer, savedTransaction);
+		transactionService.assignCustomer(savedTransaction, savedCustomer);
 		// when
 		purchasedProductService.removeProduct(savedProduct.getId());
 		// then;
@@ -650,7 +475,7 @@ public class TransactionServiceTest {
 	}
 
 	@Test(expected = TransactionNotAllowedException.class)
-	public void shouldThrowTransactionNotAllower() throws NoValidConnection {
+	public void shouldThrowTransactionNotAllowedByProceAndQuantity() throws NoValidConnection {
 		PurchasedProductTO product = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
 				.withPrice(7200.0).withWeight(12.0).build();
 		PurchasedProductTO savedProduct = purchasedProductService.savePurchasedProduct(product);
@@ -677,6 +502,35 @@ public class TransactionServiceTest {
 		OrderTO order1 = new OrderTOBuilder().withAmount(45).withProductTOId(savedProduct.getId())
 				.withTransactionTO(savedTransaction3.getId()).build();
 		OrderTO savedOrder = orderService.saveOrder(order1);
+		customerService.assignTransaction(savedCustomer, savedTransaction1);
+		transactionService.assignCustomer(savedTransaction1, savedCustomer);
+		customerService.assignTransaction(savedCustomer, savedTransaction2);
+		transactionService.assignCustomer(savedTransaction2, savedCustomer);
+	}
 
+	@Test(expected = NoValidConnection.class)
+	public void shouldThrowTransactionNotAllowedByWeight() throws NoValidConnection {
+
+		PurchasedProductTO product = new PurchasedProductTOBuilder().withMargin(12.0).withProductName("ball")
+				.withPrice(7200.0).withWeight(12.0).build();
+		PurchasedProductTO savedProduct = purchasedProductService.savePurchasedProduct(product);
+		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
+				.withStreet("Warszawska").build();
+		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("Szaniawski")
+				.withAdressData(adress).withMobile("4564564564").build();
+		CustomerTO savedCustomer = customerService.saveCustomer(cust1);
+		OrderTO order1 = new OrderTOBuilder().withAmount(2).withProductTOId(savedProduct.getId()).build();
+		OrderTO savedOrder = orderService.saveOrder(order1);
+		List<Long> orders = new ArrayList<>();
+		orders.add(savedProduct.getId());
+		orders.add(savedProduct.getId());
+		orders.add(savedProduct.getId());
+		orders.add(savedProduct.getId());
+
+		TransactionTO transaction = new TransactionTOBuilder().withAmount(15).withCustomerId(savedCustomer.getId())
+				.withTransactionStatus(TransactionStatus.EXECUTED).withOrders(orders).build();
+		TransactionTO savedTransaction = transactionService.saveTransaction(transaction);
+		customerService.assignTransaction(savedCustomer, savedTransaction);
+		transactionService.assignCustomer(savedTransaction, savedCustomer);
 	}
 }
