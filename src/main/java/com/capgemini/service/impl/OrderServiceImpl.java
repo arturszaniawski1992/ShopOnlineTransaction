@@ -3,9 +3,9 @@ package com.capgemini.service.impl;
 import java.util.List;
 
 import javax.persistence.OptimisticLockException;
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.capgemini.dao.OrderRepository;
 import com.capgemini.dao.PurchasedProductRepository;
@@ -19,7 +19,7 @@ import com.capgemini.service.OrderService;
 import com.capgemini.types.OrderTO;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class OrderServiceImpl implements OrderService {
 
 	private final OrderRepository orderRepository;
@@ -51,6 +51,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public OrderTO updateOrder(OrderTO orderTO) {
 		OrderEntity orderEntity = orderRepository.getOne(orderTO.getId());
 		if (orderEntity.getVersion() != orderTO.getVersion()) {
@@ -63,6 +64,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public OrderTO saveOrder(OrderTO orderTO) throws NoValidConnection {
 		if (orderTO.getProductTOId() == null || orderTO.getTransactionTOId() == null) {
 			throw new NoValidConnection();
@@ -83,6 +85,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public void removeOrder(Long id) {
 		orderRepository.delete(id);
 	}

@@ -29,6 +29,7 @@ public class CustomerRepositoryImpl implements CustomizedCustomerRepository {
 		return customerEntity;
 	}
 
+	// 2e
 	@Override
 	public List<CustomerEntity> findTopThreeClientsWhoSpentTheMostInPeriod(Date dateFrom, Date dateTo,
 			int amountOfClients) {

@@ -1,14 +1,9 @@
 package com.capgemini.dao.customize.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -22,6 +17,8 @@ import com.capgemini.domain.QTransactionEntity;
 import com.capgemini.domain.TransactionEntity;
 import com.capgemini.enums.TransactionStatus;
 import com.capgemini.types.TransactionSearchCriteria;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -37,7 +34,7 @@ public class TransactionRepositoryImpl implements CustomizedTransactionRepositor
 		return transactionEntity;
 	}
 
-	// c
+	// 2c
 	@Override
 	public Double getTotalAmountOfTransactionsWithStatus(Long id, TransactionStatus status) {
 		JPAQuery<Double> query = new JPAQuery(entityManager);
@@ -55,36 +52,47 @@ public class TransactionRepositoryImpl implements CustomizedTransactionRepositor
 	// 2a
 	@Override
 	public List<TransactionEntity> searchForTransactionsBySearchCriteria(TransactionSearchCriteria searchCriteria) {
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
-		CriteriaQuery<TransactionEntity> query = cb.createQuery(TransactionEntity.class);
-		Root<TransactionEntity> transactionEntity = query.from(TransactionEntity.class);
+		JPAQueryFactory queryFactory = new JPAQueryFactory(this.entityManager);
+		QTransactionEntity transactionEntity = QTransactionEntity.transactionEntity;
+		QPurchasedProductEntity purchasedProductEntity = QPurchasedProductEntity.purchasedProductEntity;
+		QOrderEntity orderEntity = QOrderEntity.orderEntity;
 
-		List<Predicate> predicates = new ArrayList<>();
+		BooleanBuilder query = new BooleanBuilder();
 
 		if (searchCriteria.getCustomerName() != null) {
-			predicates.add(cb.equal(transactionEntity.get("customerEntity"), searchCriteria.getCustomerName()));
+			query.and(transactionEntity.customerEntity.lastName.eq(searchCriteria.getCustomerName()));
 		}
 
-		if (searchCriteria.getDateFrom() != null) {
-			predicates.add(cb.equal(transactionEntity.get("dateTransaction"), searchCriteria.getDateFrom()));
+		if (searchCriteria.getDateFrom() != null && searchCriteria.getDateTo() != null) {
+			query.and(transactionEntity.dateTransaction.between(searchCriteria.getDateFrom(),
+					searchCriteria.getDateTo()));
 		}
 
-		if (searchCriteria.getDateTo() != null) {
-			predicates.add(cb.equal(transactionEntity.get("dateTransaction"), searchCriteria.getDateTo()));
+		if (searchCriteria.getProductId() != null) {
+			query.and(purchasedProductEntity.id.eq(searchCriteria.getProductId()));
+		}
+		if (searchCriteria.getTotalTransactionAmount() == null) {
+			return queryFactory.selectFrom(transactionEntity).innerJoin(transactionEntity.orders, orderEntity)
+					.innerJoin(orderEntity.productEntity, purchasedProductEntity).where(query)
+					.groupBy(transactionEntity.id).fetch();
+		} else {
+			return queryFactory
+					.selectFrom(
+							transactionEntity)
+					.innerJoin(transactionEntity.orders, orderEntity)
+					.innerJoin(orderEntity.productEntity, purchasedProductEntity)
+					.where(transactionEntity.id
+							.in(JPAExpressions.select(transactionEntity.id).from(transactionEntity)
+									.innerJoin(transactionEntity.orders, orderEntity)
+									.innerJoin(orderEntity.productEntity, purchasedProductEntity)
+									.groupBy(transactionEntity.id)
+									.having(orderEntity.amount.multiply(purchasedProductEntity.price).doubleValue()
+											.sum().doubleValue().eq(searchCriteria.getTotalTransactionAmount())))
+							.and(query))
+					.groupBy(transactionEntity.id).fetch();
 		}
 
-		if (searchCriteria.getProductName() != null) {
-			predicates.add(cb.equal(transactionEntity.get("productName"), searchCriteria.getProductName()));
-		}
-
-		if (searchCriteria.getTotalTransactionAmount() != null) {
-			predicates.add(cb.equal(transactionEntity.get("amount"), searchCriteria.getTotalTransactionAmount()));
-		}
-
-		query.select(transactionEntity).where(predicates.toArray(new Predicate[] {}));
-
-		return entityManager.createQuery(query).getResultList();
 	}
 
 	// 2g

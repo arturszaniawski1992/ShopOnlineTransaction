@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.OptimisticLockException;
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -16,9 +15,10 @@ import com.capgemini.mappers.CustomerMapper;
 import com.capgemini.service.CustomerService;
 import com.capgemini.types.CustomerTO;
 import com.capgemini.types.TransactionTO;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class CustomerServiceImpl implements CustomerService {
 
 	private final CustomerRepository customerRepository;
@@ -41,6 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public CustomerTO saveCustomer(CustomerTO customerTO) {
 		CustomerEntity customerEntity = customerRepository.save(customerMapper.toCustomerEntity(customerTO));
 		return customerMapper.toCustomerTO(customerEntity);
@@ -53,6 +54,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public CustomerTO updateCustomer(CustomerTO customerTO) {
 
 		CustomerEntity customerEntity = customerRepository.findById(customerTO.getId());
@@ -70,12 +72,14 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public void removeCustomer(Long id) {
 		customerRepository.deleteById(id);
 
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public CustomerTO assignTransaction(CustomerTO customerTO, TransactionTO transactionTO) {
 		return customerMapper.toCustomerTO(customerRepository.assignTransaction(
 				customerRepository.getOne(customerTO.getId()), transactionRepository.getOne(transactionTO.getId())));

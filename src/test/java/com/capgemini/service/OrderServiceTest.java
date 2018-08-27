@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.capgemini.domain.OrderEntity;
+import com.capgemini.exception.InvalidCreationException;
 import com.capgemini.exception.NoValidConnection;
 import com.capgemini.mappers.OrderMapper;
 import com.capgemini.types.AdressDataTO;
@@ -198,6 +199,14 @@ public class OrderServiceTest {
 		OrderEntity mappedOrder = orderMapper.toOrderEntity(order1);
 		// then
 		assertEquals(mappedOrder.getAmount(), savedOrder.getAmount());
+
+	}
+
+	@Test(expected = InvalidCreationException.class)
+	public void shouldThrowExceptionWhileCreatingOrder() throws NoValidConnection {
+
+		OrderTO order = new OrderTOBuilder().build();
+		orderService.saveOrder(order);
 
 	}
 }

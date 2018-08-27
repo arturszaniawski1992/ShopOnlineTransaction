@@ -1,6 +1,6 @@
 package com.capgemini.dao.customize;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import com.capgemini.domain.CustomerEntity;

@@ -3,6 +3,7 @@ package com.capgemini.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -98,6 +99,25 @@ public class CustomerServiceTest {
 	}
 
 	@Test
+	public void shouldCannotFoundCustomer() {
+		// given
+		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
+				.withStreet("Warszawska").build();
+
+		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("Szaniawski")
+				.withAdressData(adress).withMobile("4564564564").build();
+
+		customerService.saveCustomer(cust1);
+
+		// when
+		CustomerTO selectedCustomer = customerService.findCustomerById(3L);
+
+		// then
+		assertNull(selectedCustomer);
+
+	}
+
+	@Test
 	public void shouldFindAllCustomers() {
 		// given
 		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
@@ -140,6 +160,24 @@ public class CustomerServiceTest {
 		assertThat(updatedCustomer.getId()).isEqualTo(addedCustomer.getId());
 		assertThat(customerService.findCustomerById(updatedCustomer.getId()).getLastName()).isEqualTo(lastName);
 		assertThat(clients.size()).isEqualTo(1);
+	}
+
+	@Test(expected = InvalidCreationException.class)
+	public void shouldNotUpdateCustomer() {
+		// given
+		AdressDataTO adress = new AdressDataTOBuilder().withCity("Poznan").withPostCode("21-400").withNumber(15)
+				.withStreet("Warszawska").build();
+
+		CustomerTO cust1 = new CustomerTOBuilder().withFirstName("Artur").withLastName("Szaniawski")
+				.withAdressData(adress).withMobile("4564564564").build();
+		CustomerTO addedCustomer = customerService.saveCustomer(cust1);
+
+		// when
+		addedCustomer.setLastName(null);
+		CustomerTO updatedCustomer = customerService.updateCustomer(addedCustomer);
+
+		// then
+		assertNull(updatedCustomer);
 	}
 
 	@Test

@@ -1,11 +1,11 @@
 package com.capgemini.service.impl;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.capgemini.dao.CustomerRepository;
 import com.capgemini.dao.OrderRepository;
@@ -24,7 +24,7 @@ import com.capgemini.types.TransactionSearchCriteria;
 import com.capgemini.types.TransactionTO;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class TransactionServiceImpl implements TransactionService {
 
 	private final CustomerRepository customerRepository;
@@ -51,6 +51,7 @@ public class TransactionServiceImpl implements TransactionService {
 			throws TransactionNotAllowedException {
 		checkIfCustomerHasLessThanThreeTransaction(customerEntity, products);
 		checkIfWeightOfProductsIsLessThanLimit(products);
+		checkIfTransactionHasMoreThanFiveSameLuxuryProducts(products);
 
 	}
 
@@ -76,6 +77,29 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 		if (sumOfWeight > limitWeight) {
 			throw new TransactionNotAllowedException();
+		}
+	}
+
+	private void checkIfTransactionHasMoreThanFiveSameLuxuryProducts(List<PurchasedProductEntity> products)
+			throws TransactionNotAllowedException {
+		List<PurchasedProductEntity> expensiveProduct = new ArrayList<>();
+		for (PurchasedProductEntity product : products) {
+
+			if (product.getPrice() > 7000.0) {
+				expensiveProduct.add(product);
+			}
+
+			for (int i = 0; i < expensiveProduct.size() - 1; i++) {
+				int count = 1;
+				for (int j = 1; j < expensiveProduct.size(); j++) {
+					if (expensiveProduct.get(i).getId() == expensiveProduct.get(j).getId()) {
+						count++;
+					}
+					if (count > 5) {
+						throw new TransactionNotAllowedException();
+					}
+				}
+			}
 		}
 	}
 

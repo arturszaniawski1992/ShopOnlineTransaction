@@ -1,13 +1,46 @@
-C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter\src\main\java\com\capgemini\dao\impl\AbstractDao.java
-C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter\src\main\java\com\capgemini\service\BookService.java
-C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter\src\main\java\com\capgemini\types\AuthorTO.java
-C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter\src\main\java\com\capgemini\domain\BookEntity.java
-C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter\src\main\java\com\capgemini\mappers\AuthorMapper.java
-C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter\src\main\java\com\capgemini\dao\BookDao.java
-C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter\src\main\java\com\capgemini\mappers\BookMapper.java
-C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter\src\main\java\com\capgemini\domain\AuthorEntity.java
-C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter\src\main\java\com\capgemini\StarterKitJpaStarterApplication.java
-C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter\src\main\java\com\capgemini\dao\Dao.java
-C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter\src\main\java\com\capgemini\types\BookTO.java
-C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter\src\main\java\com\capgemini\service\impl\BookServiceImpl.java
-C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter\src\main\java\com\capgemini\dao\impl\BookDaoImpl.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\dao\TransactionRepository.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\types\CustomerTO.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\StarterKitJpaStarterApplication.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\domain\AbstractEntity.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\listeners\InsertListener.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\mappers\TransactionMapper.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\dao\Dao.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\domain\PurchasedProductEntity.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\service\TransactionService.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\types\TransactionTO.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\domain\TransactionEntity.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\service\impl\TransactionServiceImpl.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\service\OrderService.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\service\impl\PurchasedProductServiceImpl.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\dao\customize\CustomizedCustomerRepository.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\embeded\AdressData.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\types\OrderTO.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\enums\TransactionStatus.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\mappers\OrderMapper.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\dao\customize\impl\PurchasedProductRepositoryImpl.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\dao\customize\CustomizedPurchasedProductRepository.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\mappers\PurchasedProductMapper.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\service\impl\CustomerServiceImpl.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\service\PurchasedProductService.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\domain\CustomerEntity.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\types\AdressDataTO.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\exception\InvalidCreationException.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\service\CustomerService.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\dao\PurchasedProductRepository.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\types\PurchasedProductTOWithNameAndAmount.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\dao\customize\impl\TransactionRepositoryImpl.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\dao\customize\impl\OrderRepositoryImpl.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\dao\OrderRepository.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\listeners\UpdateListener.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\dao\CustomerRepository.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\exception\NoValidConnection.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\exception\TransactionNotAllowedException.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\mappers\CustomerMapper.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\dao\customize\CustomizedTransactionRepository.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\dao\customize\CustomizedOrderRepository.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\domain\OrderEntity.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\mappers\AdressMapper.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\types\PurchasedProductTO.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\dao\customize\impl\CustomerRepositoryImpl.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\service\impl\OrderServiceImpl.java
+C:\Users\aszaniaw\Desktop\JPA\03_Materialy\starter-kit-jpa-starter - shop-online\src\main\java\com\capgemini\types\TransactionSearchCriteria.java

@@ -7,7 +7,7 @@ public class TransactionSearchCriteria {
 	private String customerName;
 	private Date dateFrom;
 	private Date dateTo;
-	private String productName;
+	private Long productId;
 	private Double totalTransactionAmount;
 
 	public String getCustomerName() {
@@ -34,12 +34,12 @@ public class TransactionSearchCriteria {
 		this.dateTo = dateTo;
 	}
 
-	public String getProductName() {
-		return productName;
+	public Long getProductId() {
+		return productId;
 	}
 
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 
 	public Double getTotalTransactionAmount() {

@@ -63,7 +63,7 @@ public class CustomerRepositioryTest {
 		CustomerEntity cust2 = new CustomerEntityBuilder().withFirstName("Artur").withLastName("Szaniawski")
 				.withMobile("456123456").withAdressData(adress).build();
 
-		CustomerEntity save1 = customerRepository.save(cust1);
+		customerRepository.save(cust1);
 		CustomerEntity save2 = customerRepository.save(cust2);
 
 		// when

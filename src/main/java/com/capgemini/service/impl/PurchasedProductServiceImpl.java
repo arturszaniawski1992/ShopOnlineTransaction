@@ -3,9 +3,9 @@ package com.capgemini.service.impl;
 import java.util.List;
 
 import javax.persistence.OptimisticLockException;
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.capgemini.dao.CustomerRepository;
 import com.capgemini.dao.PurchasedProductRepository;
@@ -16,7 +16,7 @@ import com.capgemini.types.PurchasedProductTO;
 import com.capgemini.types.PurchasedProductTOWithNameAndAmount;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class PurchasedProductServiceImpl implements PurchasedProductService {
 
 	private final CustomerRepository customerRepository;
@@ -44,6 +44,7 @@ public class PurchasedProductServiceImpl implements PurchasedProductService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public PurchasedProductTO updateProduct(PurchasedProductTO purchasedProductTO) {
 		PurchasedProductEntity productEntity = purchasedProductRepository.findById(purchasedProductTO.getId());
 		if (productEntity.getVersion() != purchasedProductTO.getVersion()) {
@@ -57,12 +58,14 @@ public class PurchasedProductServiceImpl implements PurchasedProductService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public PurchasedProductTO savePurchasedProduct(PurchasedProductTO purchasedProductTO) {
 		return purchasedProductMapper.toPurchasedProductTO(
 				purchasedProductRepository.save(purchasedProductMapper.toPurchasedProductEntity(purchasedProductTO)));
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public void removeProduct(Long id) {
 		customerRepository.deleteById(id);
 
